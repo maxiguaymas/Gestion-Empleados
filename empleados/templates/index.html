@@ -1,0 +1,26 @@
+<head>
+    <title>Inicio</title>
+</head>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<main class="container py-3 pb-1">
+    <div class="row justify-content-center pb-4">
+        <div class="col-md-8 text-center">
+            <img src="{% static 'images/logo-nuevas-energias-v2.png' %}" alt="Nuevas Energías" class="my-4" style="max-width: 300px;">
+            <h1 class="mb-4">Bienvenido al Sistema de Gestión de Empleados</h1>
+            <p class="lead mb-4">
+                Administra fácilmente la información de tus empleados.<br>
+                Puedes agregar, editar, eliminar y consultar los datos de tu personal desde un solo lugar.
+            </p>
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item">✔️ Registro y edición de empleados</li>
+                <li class="list-group-item">✔️ Búsqueda y filtrado de personal</li>
+                <li class="list-group-item">✔️ Eliminación segura de registros</li>
+                <li class="list-group-item">✔️ Visualización de detalles y estadísticas</li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
