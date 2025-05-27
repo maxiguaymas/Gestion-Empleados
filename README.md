@@ -1,10 +1,16 @@
-Proyecto CRUD EMPLEADOS
+<img src="https://1000marcas.net/wp-content/uploads/2021/06/Django-Logo.png" width="150" height="150">
+<h1>Proyecto CRUD EMPLEADOS</h1>
 
-Pasos para el clone:
+<h2>Pasos para clonar el proyecto: </h2>
 
-1_git clone
-2_py -m venv env
-3_./env/Scripts/activate
-4_pip install django
+<ol>
+	<li>git clone</li>
+	<li>py -m venv env</li>
+	<li>./env/Scripts/activate</li>
+	<li>pip install django</li>
+	<li>py manage.py makemigrations</li>
+	<li>py manage.py migrate</li>
+</ol>
+
 
 
