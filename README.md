@@ -4,7 +4,7 @@
 <h2>Pasos para clonar el proyecto: </h2>
 
 <ol>
-	<li>git clone</li>
+	<li>git clone https://github.com/maxiguaymas/empleados-proy.git</li>
 	<li>py -m venv env</li>
 	<li>./env/Scripts/activate</li>
 	<li>pip install django</li>
