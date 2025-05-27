@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
+from django.utils import timezone
 from .forms import EmpleadoForm
 from .models import Empleado
 
@@ -38,15 +39,13 @@ def editar_empleado(request, id):
     return render(request, 'editar_empleado.html', {'form': form})
 
 def eliminar_empleado(request, id):
-    empleado = Empleado.objects.get(id=id)
-    
-    if request.method == 'POST':
-        empleado.delete()
-        return redirect('index')
-    
-    return render(request, 'eliminar_empleado.html', {'empleado': empleado})
+    empleado = get_object_or_404(Empleado, id=id)
+    empleado.fecha_egreso = timezone.now().date()
+    empleado.estado = 'Inactivo'
+    empleado.save()
+    return redirect('ver_empleados')
 
 def ver_empleados(request):
-    empleados = Empleado.objects.all()
+    empleados = Empleado.objects.filter(fecha_egreso__isnull=True)
     return render(request, 'empleados.html', {'empleados': empleados})
     
