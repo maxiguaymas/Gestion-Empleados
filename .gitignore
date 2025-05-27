@@ -15,3 +15,5 @@ __pycache__/
 # Archivos de migraciones compilados (NO ignores los .py de migraciones)
 **/migrations/__pycache__/
 **/migrations/*.pyc
+
+db.sqlite3
