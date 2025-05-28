@@ -53,10 +53,14 @@
                     <li class="nav-item">
                         <a href="/inicio" class="nav-link {% if request.path == '/inicio/' %}active{% endif %}">Inicio</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{% url 'ver_empleados' %}" class="nav-link {% if request.resolver_match.url_name == 'ver_empleados' %}active{% endif %}">Empleados</a>
-                    </li>
                     {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'ver_empleados' %}" class="nav-link {% if request.resolver_match.url_name == 'ver_empleados' %}active{% endif %}">Empleados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'crear_empleado' %}" class="nav-link {% if request.resolver_match.url_name == 'ver_empleados' %}active{% endif %}">Crear empleado</a>
+                        </li>
+                        
                         <li class="nav-item">
                             <a href="/auth/logout/" class="nav-link">Cerrar sesión</a>
                         </li>

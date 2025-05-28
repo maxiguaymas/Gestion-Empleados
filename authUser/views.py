@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 # Create your views here.
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     if request.method == 'GET':
         return render(request, 'login.html',{'form': AuthenticationForm()})
 
@@ -24,6 +26,8 @@ def logout(request):
     return redirect('index')
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     if request.method == 'GET':
         return render(request, 'register.html', {'form': UserCreationForm()})
     
