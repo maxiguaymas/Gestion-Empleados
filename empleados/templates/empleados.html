@@ -42,6 +42,7 @@
                             </td>
                             <td>{{ empleado.fecha_ingreso|date:"d/m/Y" }}</td>
                             <td class="text-center">
+                                <a href="{% url 'ver_empleado' empleado.id %}" class="btn btn-sm btn-outline-primary">Ver</a>
                                 <a href="{% url 'editar_empleado' empleado.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
                                 <a href="{% url 'eliminar_empleado' empleado.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
                             </td>
