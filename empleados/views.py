@@ -10,7 +10,6 @@ def index(request):
     return render(request, 'index.html')
 
 @login_required
-
 def crear_empleado(request):
     form = EmpleadoForm()
 

@@ -11,7 +11,11 @@ class EmpleadoForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if not self.instance or not self.instance.pk:
+        if self.instance and self.instance.pk:
+            # Si es edición, deshabilita fecha_egreso
+            self.fields['fecha_egreso'].widget.attrs['disabled'] = True
+        else:
+            # Si es creación, oculta fecha_egreso
             self.fields['fecha_egreso'].widget = forms.HiddenInput()
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'

@@ -1,6 +1,13 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 # Create your models here.
+def validar_mayor_18(value):
+    hoy = timezone.now().date()
+    edad = hoy.year - value.year - ((hoy.month, hoy.day) < (value.month, value.day))
+    if edad < 18:
+        raise ValidationError('El empleado debe ser mayor de 18 años.')
 
 class Empleado(models.Model):
     nombre = models.CharField(max_length=100)
@@ -10,7 +17,7 @@ class Empleado(models.Model):
     email = models.EmailField()
     genero = models.CharField(max_length=1, choices=[('M', 'Masculino'), ('F', 'Femenino'), ('O', 'Otro')], default='O')
     estado_civil = models.CharField(max_length=20, choices=[('Soltero', 'Soltero'), ('Casado', 'Casado'), ('Divorciado', 'Divorciado'), ('Viudo', 'Viudo')], default='Soltero')
-    fecha_nacimiento = models.DateField()
+    fecha_nacimiento = models.DateField(validators=[validar_mayor_18])
     estado = models.CharField(max_length=20, choices=[('Activo', 'Activo'), ('Inactivo', 'Inactivo'), ('Suspendido', 'Suspendido'), ('Licencia', 'Licencia')], default='Activo')
     fecha_ingreso = models.DateField(auto_now_add=True)
     fecha_egreso = models.DateField(blank=True, null=True)
