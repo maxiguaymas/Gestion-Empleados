@@ -44,7 +44,7 @@
                             <td class="text-center">
                                 <a href="{% url 'ver_empleado' empleado.id %}" class="btn btn-sm btn-outline-primary">Ver</a>
                                 <a href="{% url 'editar_empleado' empleado.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
-                                <a href="{% url 'eliminar_empleado' empleado.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                                <a href="{% url 'eliminar_empleado' empleado.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirmarEliminacion(this);">Eliminar</a>
                             </td>
                         </tr>
                         {% empty %}
@@ -59,4 +59,25 @@
     </div>
 </main>
 
+<script>
+function confirmarEliminacion(element) {
+    event.preventDefault();
+    const url = element.getAttribute('href');
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción no se puede deshacer.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
+    return false; // Previene la navegación por defecto
+}
+</script>
 {% endblock %}
