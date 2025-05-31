@@ -14,21 +14,32 @@
                         <h3 class="mt-3 mb-0">Iniciar sesión</h3>
                     </div>
                     {% if error %}
-                    <div class="alert alert-danger">
-                        {{error}}
+                    <div class="alert alert-danger mt-3" id="bloqueo-msg">
+                        {{ error|safe }}
                     </div>
                     {% endif %}
                     <form method="post" novalidate>
                         {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Nombre de usuario: </label>
-                        <input type="text" class="form-control" id="username" name="username" required placeholder="Ingrese su nombre de usuario">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña: </label>
-                        <input type="password" class="form-control" id="password" name="password" required placeholder="Ingrese su contraseña">
-                    </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre de usuario: </label>
+                            <input type="text" class="form-control" id="username" name="username" required placeholder="Ingrese su nombre de usuario" {% if bloqueado %}disabled{% endif %}>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña: </label>
+                            <input type="password" class="form-control" id="password" name="password" required placeholder="Ingrese su contraseña" {% if bloqueado %}disabled{% endif %}>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_captcha_1" class="form-label">Captcha:</label>
+                            {{ form.captcha }}
+                            {% if form.captcha.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.captcha.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if not bloqueado %}
                         <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                        {% endif %}
                     </form>
                     <div class="mt-3 text-center">
                         <span>¿No tienes cuenta?</span>
@@ -39,5 +50,30 @@
         </div>
     </div>
 </main>
-
+{% if error %}
+<script>
+    let tiempoElem = document.getElementById('tiempo-bloqueo');
+    let alertaElem = document.getElementById('bloqueo-msg');
+    if (tiempoElem) {
+        let regex = /(\d+)\s*m\s+y\s*(\d+)\s*s/;
+        let match = tiempoElem.innerText.match(regex);
+        if (match) {
+            let minutos = parseInt(match[1]);
+            let segundos = parseInt(match[2]);
+            let total = minutos * 60 + segundos;
+            let intervalo = setInterval(function () {
+                if (total <= 0) {
+                    clearInterval(intervalo);
+                    location.reload(); // <-- Esto recarga la página
+                    return;
+                }
+                total--;
+                let m = Math.floor(total / 60);
+                let s = total % 60;
+                tiempoElem.innerText = m + ' m y ' + s + ' s';
+            }, 1000);
+        }
+    }
+</script>
+{% endif %}
 {% endblock %}
