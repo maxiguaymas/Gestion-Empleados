@@ -2,7 +2,7 @@
   <img src="https://1000marcas.net/wp-content/uploads/2021/06/Django-Logo.png" width="150" height="150">
 </p>
 
-<h1 class="text-center text-primary">Proyecto CRUD EMPLEADOS</h1>
+<h1 class="text-center text-primary">Proyecto Gestion de Empleados Nuevas Energias</h1>
 
 <h2 class="mt-4">Pasos para clonar el proyecto:</h2>
 
