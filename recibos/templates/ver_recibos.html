@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 min-vh-100">
+    <h2 class="mb-4">Recibos de Sueldos</h2>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-auto">
+            <label for="dni" class="col-form-label">Buscar por DNI:</label>
+        </div>
+        <div class="col-auto">
+            <input type="text" id="dni" name="dni" class="form-control" placeholder="Ingrese DNI" value="{{ request.GET.dni|default_if_none:'' }}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+
+    {% if recibos %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Archivo</th>
+                        <th scope="col">Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recibo in recibos %}
+                    <tr>
+                        <td>{{ recibo.fecha_emision }}</td>
+                        <td>
+                            <a href="{{ recibo.ruta_pdf }}" class="btn btn-primary btn-sm" target="_blank">
+                                Descargar
+                            </a>
+                        </td>
+                        <td>{{ recibo.periodo }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% elif request.GET.empleado_id %}
+        <div class="alert alert-info" role="alert">
+            No hay recibos para este empleado.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

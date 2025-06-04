@@ -17,10 +17,18 @@ def cargar_recibo(request):
     return render(request, 'cargar_recibo.html', {'form': form})
 
 def ver_recibos(request):
-    # Solo permitir acceso a usuarios autenticados
-    try:
-        empleado = Empleado.objects.get(email=request.user.email)
-        recibos = Recibo_Sueldos.objects.filter(id_empl=empleado)
-    except Empleado.DoesNotExist:
-        recibos = []
-    return render(request, 'ver_recibos.html', {'recibos': recibos})
+    empleados = Empleado.objects.all()
+    empleado_id = request.GET.get('empleado_id')
+    recibos = []
+
+    if empleado_id:
+        try:
+            empleado = Empleado.objects.get(id=empleado_id)
+            recibos = Recibo_Sueldos.objects.filter(id_empl=empleado)
+        except Empleado.DoesNotExist:
+            recibos = []
+
+    return render(request, 'ver_recibos.html', {
+        'empleados': empleados,
+        'recibos': recibos
+    })
