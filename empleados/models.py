@@ -34,7 +34,5 @@ class Recibo_Sueldos(models.Model):
     ruta_pdf = models.FileField(upload_to='recibos/pdf/')
     ruta_imagen = models.ImageField(upload_to='recibos/imagenes/', blank=True, null=True)
 
-    class Meta:
-        unique_together = ('id_empl', 'periodo')
     def __str__(self):
         return f"Recibo {self.id_recibo} - {self.id_empl.nombre} {self.id_empl.apellido}"
