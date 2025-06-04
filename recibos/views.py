@@ -1,20 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from empleados.models import Recibo_Sueldos, Empleado
-from .forms import ReciboSueldosForm  # Debes crear este formulario
+from .forms import ReciboSueldoForm  # Debes crear este formulario
 
 def cargar_recibo(request):
     # Solo permitir acceso a usuarios del grupo 'Administradores'
    
     if request.method == 'POST':
-        form = ReciboSueldosForm(request.POST, request.FILES)
+        form = ReciboSueldoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "Recibo cargado correctamente.")
             return redirect('ver_recibos')
     else:
-        form = ReciboSueldosForm()
-    return render(request, 'recibos/cargar_recibo.html', {'form': form})
+        form = ReciboSueldoForm()
+    return render(request, 'cargar_recibo.html', {'form': form})
 
 def ver_recibos(request):
     # Solo permitir acceso a usuarios autenticados
@@ -23,4 +23,4 @@ def ver_recibos(request):
         recibos = Recibo_Sueldos.objects.filter(id_empl=empleado)
     except Empleado.DoesNotExist:
         recibos = []
-    return render(request, 'recibos/ver_recibos.html', {'recibos': recibos})
+    return render(request, 'ver_recibos.html', {'recibos': recibos})
