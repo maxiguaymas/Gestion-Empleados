@@ -4,7 +4,11 @@ from empleados.models import Recibo_Sueldos, Empleado
 from .forms import ReciboSueldoForm  # Debes crear este formulario
 
 def cargar_recibo(request):
-    # Solo permitir acceso a usuarios del grupo 'Administradores'
+    # Solo permitir acceso a usuarios logeados
+    if not request.user.is_authenticated:
+        messages.error(request, "Debes iniciar sesión para cargar un recibo.")
+        return redirect('login')
+    
    
     if request.method == 'POST':
         form = ReciboSueldoForm(request.POST, request.FILES)
@@ -17,6 +21,10 @@ def cargar_recibo(request):
     return render(request, 'cargar_recibo.html', {'form': form})
 
 def ver_recibos(request):
+    # Solo permitir acceso a usuarios logeados
+    if not request.user.is_authenticated:
+        messages.error(request, "Debes iniciar sesión para ver los recibos.")
+        return redirect('login')
     recibos = []
     mensaje = None
     dni = request.GET.get('dni')
