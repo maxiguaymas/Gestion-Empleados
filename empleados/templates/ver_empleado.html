@@ -10,21 +10,62 @@
             <div class="card shadow">
                 <div class="card-body">
                     <div class="text-center mb-4">
-                        <img src="{% static 'images/logo-nuevas-energias-v2.png' %}" alt="Logo" style="max-width: 100px;">
+                        <img src="{% static 'images/logo-nuevas-energias-v2.png' %}" alt="Logo"
+                            style="max-width: 100px;">
                         <h3 class="mt-3 mb-0">Detalle del Empleado</h3>
+                        {% if empleado.ruta_foto %}
+                        <img src="{{ empleado.ruta_foto.url }}" alt="Foto de {{ empleado.nombre }}"
+                            class="rounded-circle shadow mt-3" style="width: 120px; height: 120px; object-fit: cover;">
+                        {% else %}
+                        <img src="{% static 'images/default-user.jpg' %}" alt="Sin foto"
+                            class="rounded-circle shadow mt-3" style="width: 120px; height: 120px; object-fit: cover;">
+                        {% endif %}
                     </div>
                     <table class="table table-borderless mb-0">
-                        <tr><th>Nombre:</th><td>{{ empleado.nombre }}</td></tr>
-                        <tr><th>Apellido:</th><td>{{ empleado.apellido }}</td></tr>
-                        <tr><th>DNI:</th><td>{{ empleado.dni }}</td></tr>
-                        <tr><th>Teléfono:</th><td>{{ empleado.telefono|default:'-' }}</td></tr>
-                        <tr><th>Email:</th><td>{{ empleado.email }}</td></tr>
-                        <tr><th>Género:</th><td>{{ empleado.get_genero_display }}</td></tr>
-                        <tr><th>Estado civil:</th><td>{{ empleado.get_estado_civil_display }}</td></tr>
-                        <tr><th>Fecha de nacimiento:</th><td>{{ empleado.fecha_nacimiento|date:'d/m/Y' }}</td></tr>
-                        <tr><th>Estado:</th><td>{{ empleado.estado }}</td></tr>
-                        <tr><th>Fecha de ingreso:</th><td>{{ empleado.fecha_ingreso|date:'d/m/Y' }}</td></tr>
-                        <tr><th>Fecha de egreso:</th><td>{{ empleado.fecha_egreso|date:'d/m/Y'|default:'-' }}</td></tr>
+                        <tr>
+                            <th>Nombre:</th>
+                            <td>{{ empleado.nombre }}</td>
+                        </tr>
+                        <tr>
+                            <th>Apellido:</th>
+                            <td>{{ empleado.apellido }}</td>
+                        </tr>
+                        <tr>
+                            <th>DNI:</th>
+                            <td>{{ empleado.dni }}</td>
+                        </tr>
+                        <tr>
+                            <th>Teléfono:</th>
+                            <td>{{ empleado.telefono|default:'-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{ empleado.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Género:</th>
+                            <td>{{ empleado.get_genero_display }}</td>
+                        </tr>
+                        <tr>
+                            <th>Estado civil:</th>
+                            <td>{{ empleado.get_estado_civil_display }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha de nacimiento:</th>
+                            <td>{{ empleado.fecha_nacimiento|date:'d/m/Y' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Estado:</th>
+                            <td>{{ empleado.estado }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha de ingreso:</th>
+                            <td>{{ empleado.fecha_ingreso|date:'d/m/Y' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha de egreso:</th>
+                            <td>{{ empleado.fecha_egreso|date:'d/m/Y'|default:'-' }}</td>
+                        </tr>
                     </table>
                     <div class="mt-4 text-center">
                         <a href="{% url 'ver_empleados' %}" class="btn btn-secondary">Volver</a>

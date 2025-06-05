@@ -19,6 +19,7 @@ class Empleado(models.Model):
     estado_civil = models.CharField(max_length=20, choices=[('Soltero', 'Soltero'), ('Casado', 'Casado'), ('Divorciado', 'Divorciado'), ('Viudo', 'Viudo')], default='Soltero')
     fecha_nacimiento = models.DateField(validators=[validar_mayor_18])
     estado = models.CharField(max_length=20, choices=[('Activo', 'Activo'), ('Inactivo', 'Inactivo'), ('Suspendido', 'Suspendido'), ('Licencia', 'Licencia')], default='Activo')
+    ruta_foto = models.ImageField(upload_to='empleados/fotos/', blank=True, null=True)
     fecha_ingreso = models.DateField(auto_now_add=True)
     fecha_egreso = models.DateField(blank=True, null=True)
 
