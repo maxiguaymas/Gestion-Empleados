@@ -7,6 +7,7 @@ class EmpleadoForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'ruta_foto': forms.ClearableFileInput(attrs={'class': 'form-control'})
         }
         
     def __init__(self, *args, **kwargs):

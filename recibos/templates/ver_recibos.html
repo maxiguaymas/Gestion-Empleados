@@ -9,42 +9,56 @@
             <label for="dni" class="col-form-label">Buscar por DNI:</label>
         </div>
         <div class="col-auto">
-            <input type="text" id="dni" name="dni" class="form-control" placeholder="Ingrese DNI" value="{{ request.GET.dni|default_if_none:'' }}">
+            <input type="text" id="dni" name="dni" class="form-control" placeholder="Ingrese DNI"
+                value="{{ request.GET.dni|default_if_none:'' }}">
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary">Buscar</button>
         </div>
     </form>
+    {% if mensaje %}
+    <div class="alert alert-info" role="alert">
+        {{ mensaje }}
+    </div>
+    {% endif %}
 
     {% if recibos %}
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Archivo</th>
-                        <th scope="col">Observaciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for recibo in recibos %}
-                    <tr>
-                        <td>{{ recibo.fecha_emision }}</td>
-                        <td>
-                            <a href="{{ recibo.ruta_pdf }}" class="btn btn-primary btn-sm" target="_blank">
-                                Descargar
-                            </a>
-                        </td>
-                        <td>{{ recibo.periodo }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% elif request.GET.empleado_id %}
-        <div class="alert alert-info" role="alert">
-            No hay recibos para este empleado.
-        </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">DNI</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Periodo</th>
+                    <th scope="col">PDF</th>
+                    <th scope="col">Imagen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recibo in recibos %}
+                <tr>
+                    <td>{{ recibo.id_empl.nombre }}</td>
+                    <td>{{ recibo.id_empl.apellido }}</td>
+                    <td>{{ recibo.id_empl.dni }}</td>
+                    <td>{{ recibo.fecha_emision }}</td>
+                    <td>{{ recibo.periodo }}</td>
+                    <td>
+                        <a href="{{ recibo.ruta_pdf.url }}" class="btn btn-primary btn-sm" target="_blank">
+                            Ver PDF
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ recibo.ruta_imagen.url }}" class="btn btn-primary btn-sm" target="_blank">
+                            Ver Imagen
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% endif %}
 </div>
 {% endblock %}

@@ -17,18 +17,21 @@ def cargar_recibo(request):
     return render(request, 'cargar_recibo.html', {'form': form})
 
 def ver_recibos(request):
-    empleados = Empleado.objects.all()
-    empleado_id = request.GET.get('empleado_id')
     recibos = []
+    mensaje = None
+    dni = request.GET.get('dni')
 
-    if empleado_id:
+    if dni:
         try:
-            empleado = Empleado.objects.get(id=empleado_id)
+            empleado = Empleado.objects.get(dni=dni)
             recibos = Recibo_Sueldos.objects.filter(id_empl=empleado)
+            if not recibos:
+                mensaje = "No hay recibos para este empleado."
         except Empleado.DoesNotExist:
-            recibos = []
+            mensaje = "No se encontró un empleado con ese DNI."
 
     return render(request, 'ver_recibos.html', {
-        'empleados': empleados,
-        'recibos': recibos
+        'recibos': recibos,
+        'mensaje': mensaje,
+        'dni': dni,
     })

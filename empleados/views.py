@@ -14,7 +14,7 @@ def crear_empleado(request):
     form = EmpleadoForm()
 
     if request.method == 'POST':
-        form = EmpleadoForm(request.POST)
+        form = EmpleadoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('index')
@@ -32,7 +32,7 @@ def editar_empleado(request, id):
     form = EmpleadoForm(instance=empleado)
 
     if request.method == 'POST':
-        form = EmpleadoForm(request.POST, instance=empleado)
+        form = EmpleadoForm(request.POST,request.FILES, instance=empleado)
         if form.is_valid():
             form.save()
             return redirect('index')
