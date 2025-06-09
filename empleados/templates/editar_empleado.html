@@ -20,7 +20,10 @@
                     <form method="post" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary w-100" onclick="return confirmarEdicion(event);">Editar Empleado</button>
+                        <button type="submit" class="btn btn-primary w-100"
+                            onclick="return confirmarEdicion(event);">Editar Empleado</button>
+                        <a href="{% url 'ver_empleados' %}" class="btn btn-secondary w-100 mt-2">Volver</a>
+
                     </form>
                 </div>
             </div>
@@ -29,25 +32,25 @@
 </main>
 
 <script>
-function confirmarEdicion(event) {
-    event.preventDefault();
-    Swal.fire({
-        title: '¿Guardar cambios?',
-        text: "¿Estás seguro de que deseas guardar los cambios de este empleado?",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, guardar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Envía el formulario manualmente
-            event.target.form.submit();
-        }
-    });
-    return false; // Previene el envío por defecto
-}
+    function confirmarEdicion(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: '¿Guardar cambios?',
+            text: "¿Estás seguro de que deseas guardar los cambios de este empleado?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Envía el formulario manualmente
+                event.target.form.submit();
+            }
+        });
+        return false; // Previene el envío por defecto
+    }
 </script>
 
 {% endblock %}

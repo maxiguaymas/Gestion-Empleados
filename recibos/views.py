@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from empleados.models import Recibo_Sueldos, Empleado
@@ -43,3 +44,14 @@ def ver_recibos(request):
         'mensaje': mensaje,
         'dni': dni,
     })
+    
+def ajax_buscar_empleado(request):
+    q = request.GET.get('q', '')
+    empleados = Empleado.objects.filter(dni__icontains=q)[:10]
+    results = []
+    for emp in empleados:
+        results.append({
+            'id': emp.dni,
+            'text': f"{emp.dni} - {emp.nombre} {emp.apellido}"
+        })
+    return JsonResponse({'results': results})
