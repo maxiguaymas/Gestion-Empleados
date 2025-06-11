@@ -10,13 +10,6 @@ from datetime import timedelta
 def login(request):
     if request.user.is_authenticated:
         return redirect('index')
-    if request.method == 'GET':
-        # Limpiar variables de bloqueo al entrar a la página
-        request.session['login_attempts'] = 0
-        request.session['blocked_until'] = None
-        request.session['block_count'] = 0
-        return render(request, 'login.html', {'form': CaptchaAuthenticationForm()})
-
     if 'login_attempts' not in request.session:
         request.session['login_attempts'] = 0
     if 'blocked_until' not in request.session:
@@ -25,12 +18,9 @@ def login(request):
         request.session['block_count'] = 0
 
     blocked_until = request.session.get('blocked_until')
-    bloqueado = False
-
     if blocked_until:
         blocked_until_time = timezone.datetime.fromisoformat(blocked_until)
         if timezone.now() < blocked_until_time:
-            bloqueado = True
             delta = blocked_until_time - timezone.now()
             minutos, segundos = divmod(delta.seconds, 60)
             return render(request, 'login.html', {
@@ -41,10 +31,10 @@ def login(request):
         else:
             request.session['login_attempts'] = 0
             request.session['blocked_until'] = None
-            # No reinicies block_count aquí, así el tiempo sigue aumentando si vuelve a fallar
-            return render(request, 'login.html', {
-                'form': CaptchaAuthenticationForm()
-            })
+            # No reinicies block_count aquí
+
+    if request.method == 'GET':
+        return render(request, 'login.html', {'form': CaptchaAuthenticationForm()})
 
     form = CaptchaAuthenticationForm(request, data=request.POST)
     if not form.is_valid():

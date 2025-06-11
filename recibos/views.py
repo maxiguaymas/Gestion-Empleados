@@ -9,7 +9,6 @@ def cargar_recibo(request):
         messages.error(request, "Debes iniciar sesión para cargar un recibo.")
         return redirect('login')
     
-   
     if request.method == 'POST':
         form = ReciboSueldoForm(request.POST, request.FILES)
         if form.is_valid():
