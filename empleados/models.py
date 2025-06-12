@@ -51,3 +51,12 @@ class Horarios(models.Model):
 
     def __str__(self):
         return f"Horario {self.id_empl.nombre} {self.id_empl.apellido} - {self.dia}"
+
+class AsignacionHorario(models.Model):
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    horario = models.ForeignKey(Horarios, on_delete=models.CASCADE)
+    fecha_asignacion = models.DateField(auto_now_add=True)
+    estado = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return f"Asignación de {self.empleado.nombre} {self.empleado.apellido} - {self.horario.dia} {self.horario.turno}"
