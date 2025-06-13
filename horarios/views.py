@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import HorarioForm
 from .forms import AsignarHorarioForm
-
+from empleados.models import Horarios
 # Create your views here.
 def cargar_horario(request):
     if request.method == 'POST':
@@ -24,7 +24,6 @@ def asignar_horario(request):
     return render(request, 'asignar_horario.html', {'form': form})
 
 def ver_horario_asig(request):
-    from .models import Horarios  # Asegúrate de tener el modelo Horarios
     horarios = Horarios.objects.select_related('empleado').all()
     return render(request, 'ver_horario_asig.html', {'horarios': horarios})
 
