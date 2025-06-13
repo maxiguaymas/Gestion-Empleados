@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import CaptchaAuthenticationForm
@@ -81,6 +81,17 @@ def register(request):
             password=request.POST['password1']
         )
         user.save()
+        if User.objects.count() == 1:
+            # Primer usuario: administrador
+            admin_group, _ = Group.objects.get_or_create(name='Administrador')
+            user.groups.add(admin_group)
+            user.is_staff = True
+            user.is_superuser = True
+            user.save()
+        else:
+            # Siguientes usuarios: empleados
+            empleado_group, _ = Group.objects.get_or_create(name='Empleado')
+            user.groups.add(empleado_group)
         auth_login(request, user)
         return redirect('index')
     except:

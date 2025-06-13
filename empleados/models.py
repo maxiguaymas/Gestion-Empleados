@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create your models here.
 def validar_mayor_18(value):
@@ -10,6 +11,7 @@ def validar_mayor_18(value):
         raise ValidationError('El empleado debe ser mayor de 18 años.')
 
 class Empleado(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='empleado')
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     dni = models.IntegerField(unique=True)
