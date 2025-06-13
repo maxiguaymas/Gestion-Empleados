@@ -1,5 +1,5 @@
 from django import forms
-from .models import Horarios, AsignacionHorario
+from empleados.models import Horarios, AsignacionHorario
 
 class HorarioForm(forms.ModelForm):
     class Meta:

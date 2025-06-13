@@ -3,7 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from empleados.models import Recibo_Sueldos, Empleado
 from .forms import ReciboSueldoForm  # Debes crear este formulario
+from empleados.views import es_admin
+from django.contrib.auth.decorators import user_passes_test
 
+@user_passes_test(es_admin)
 def cargar_recibo(request):
     # Solo permitir acceso a usuarios logeados
     if not request.user.is_authenticated:
@@ -20,6 +23,7 @@ def cargar_recibo(request):
         form = ReciboSueldoForm()
     return render(request, 'cargar_recibo.html', {'form': form})
 
+@user_passes_test(es_admin)
 def ver_recibos(request):
     # Solo permitir acceso a usuarios logeados
     if not request.user.is_authenticated:
