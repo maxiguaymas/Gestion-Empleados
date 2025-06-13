@@ -22,3 +22,10 @@ def asignar_horario(request):
     else:
         form = AsignarHorarioForm()
     return render(request, 'asignar_horario.html', {'form': form})
+
+def ver_horario_asig(request):
+    from .models import Horarios  # Asegúrate de tener el modelo Horarios
+    horarios = Horarios.objects.select_related('empleado').all()
+    return render(request, 'ver_horario_asig.html', {'horarios': horarios})
+
+
