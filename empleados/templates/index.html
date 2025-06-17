@@ -4,7 +4,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<main class="container py-3 pb-1">
+<video class="video-bg" autoplay loop muted playsinline>
+    <source src="{% static 'videos/video-index1.mp4' %}" type="video/mp4">
+    Tu navegador no soporta el video de fondo.
+</video>
+<div class="overlay-blanco"></div>
+<main class="container py-3 pb-1" id="main">
     <div class="row justify-content-center pb-4">
         <div class="col-md-8 text-center">
             <img src="{% static 'images/logo-nuevas-energias-v2.png' %}" alt="Nuevas Energías" class="my-4" style="max-width: 300px;">
