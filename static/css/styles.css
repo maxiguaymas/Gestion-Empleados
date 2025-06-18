@@ -114,3 +114,24 @@ html, body {
 }
 
 /* Ver Empleados */
+
+@media (max-width: 993px) {
+    
+    .fondo-semi {
+        width: 90%;
+    }
+}
+
+@media (max-width: 767px) {
+    /* Tus estilos aquí */
+    .card {
+        width: 90%;
+        display: block;
+        margin: 0px auto;
+    }
+    /* .table-responsive {
+        font-size: 0.95rem;
+    }
+    Agrega más reglas según lo que necesites */
+    
+}
