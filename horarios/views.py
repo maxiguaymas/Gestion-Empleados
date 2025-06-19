@@ -23,8 +23,7 @@ def asignar_horario(request):
         form = AsignarHorarioForm()
     return render(request, 'asignar_horario.html', {'form': form})
 
-def ver_horario_asig(request):
+def ver_horarios_asig(request):
     horarios = Horarios.objects.select_related('empleado').all()
-    return render(request, 'ver_horario_asig.html', {'horarios': horarios})
-
+    return render(request, 'horarios/ver_horarios_asig.html', {'horarios': horarios})
 
