@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 min-vh-100">
+    <h2 class="mb-4">Horarios Asignados</h2>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-auto">
+            <label for="dni" class="col-form-label">Buscar por DNI:</label>
+        </div>
+        <div class="col-auto">
+            <input type="text" id="dni" name="dni" class="form-control" placeholder="Ingrese DNI" value="{{ request.GET.dni|default_if_none:'' }}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+
+    {% if horarios %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Empleado</th>
+                        <th>DNI</th>
+                        <th>Día</th>
+                        <th>Hora de Entrada</th>
+                        <th>Hora de Salida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for horario in horarios %}
+                    <tr>
+                        <td>{{ horario.empleado.nombre }} {{ horario.empleado.apellido }}</td>
+                        <td>{{ horario.empleado.dni }}</td>
+                        <td>{{ horario.dia }}</td>
+                        <td>{{ horario.hora_entrada }}</td>
+                        <td>{{ horario.hora_salida }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% elif request.GET.dni %}
+        <div class="alert alert-info" role="alert">
+            No hay horarios asignados para este DNI.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
