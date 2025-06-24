@@ -115,6 +115,17 @@ html, body {
 
 /* Ver Empleados */
 
+
+/* Recibos */
+.dataTables_filter {
+    display: none;
+}
+.box-periodo{
+    display: inline;
+    
+}
+/* Recibos */
+
 @media (max-width: 993px) {
     
     .fondo-semi {

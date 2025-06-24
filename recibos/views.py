@@ -15,12 +15,20 @@ def cargar_recibo(request):
     
     if request.method == 'POST':
         form = ReciboSueldoForm(request.POST, request.FILES)
+        print(request.POST)
+        empleado_id = request.POST.get('id_empl')
+        print(empleado_id)
+        if empleado_id:
+            form.fields['id_empl'].queryset = Empleado.objects.filter(id=empleado_id)
         if form.is_valid():
             form.save()
             messages.success(request, "Recibo cargado correctamente.")
             return redirect('ver_recibos')
+        else:
+            print(form.errors)
     else:
         form = ReciboSueldoForm()
+        form.fields['id_empl'].queryset = Empleado.objects.none()
     return render(request, 'cargar_recibo.html', {'form': form})
 
 @user_passes_test(es_admin)
@@ -31,11 +39,11 @@ def ver_recibos(request):
         return redirect('login')
     recibos = []
     mensaje = None
-    dni = request.GET.get('dni')
-
-    if dni:
+    id = request.GET.get('id')
+    print(id)
+    if id:
         try:
-            empleado = Empleado.objects.get(dni=dni)
+            empleado = Empleado.objects.get(id=int(id))
             recibos = Recibo_Sueldos.objects.filter(id_empl=empleado)
             if not recibos:
                 mensaje = "No hay recibos para este empleado."
@@ -45,7 +53,7 @@ def ver_recibos(request):
     return render(request, 'ver_recibos.html', {
         'recibos': recibos,
         'mensaje': mensaje,
-        'dni': dni,
+        'dni': id,
     })
     
 def ajax_buscar_empleado(request):
@@ -54,7 +62,7 @@ def ajax_buscar_empleado(request):
     results = []
     for emp in empleados:
         results.append({
-            'id': emp.dni,
+            'id': emp.id,
             'text': f"{emp.dni} - {emp.nombre} {emp.apellido}"
         })
     return JsonResponse({'results': results})
