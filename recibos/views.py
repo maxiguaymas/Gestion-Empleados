@@ -6,6 +6,7 @@ from .forms import ReciboSueldoForm  # Debes crear este formulario
 from empleados.views import es_admin
 from django.contrib.auth.decorators import user_passes_test
 
+
 @user_passes_test(es_admin)
 def cargar_recibo(request):
     # Solo permitir acceso a usuarios logeados
@@ -66,3 +67,5 @@ def ajax_buscar_empleado(request):
             'text': f"{emp.dni} - {emp.nombre} {emp.apellido}"
         })
     return JsonResponse({'results': results})
+
+
