@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card shadow rounded">
+                <div class="card-body">
+                    <h3 class="mb-4 text-center">Asignar Empleados a Horarios</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Turno</th>
+                                        <th>Día</th>
+                                        <th>Hora Entrada</th>
+                                        <th>Hora Salida</th>
+                                        <th>Cantidad Personal</th>
+                                        <th>Seleccionar Empleados</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for horario in horarios %}
+                                    <tr>
+                                        <td>{{ horario.turno }}</td>
+                                        <td>{{ horario.dia }}</td>
+                                        <td>{{ horario.hora_entrada|time:"H:i" }}</td>
+                                        <td>{{ horario.hora_salida|time:"H:i" }}</td>
+                                        <td>{{ horario.cantidad_personal }}</td>
+                                        <td>
+                                            {% for i in "x"|ljust:horario.cantidad_personal %}
+                                                <select name="empleado_{{ horario.id }}_{{ forloop.counter }}" class="form-select mb-2">
+                                                    <option value="">Seleccione empleado</option>
+                                                    {% for empleado in empleados %}
+                                                        <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Asignar Empleados</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

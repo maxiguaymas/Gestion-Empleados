@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import User
+from datetime import time
 
 # Create your models here.
 def validar_mayor_18(value):
@@ -43,20 +44,27 @@ class Recibo_Sueldos(models.Model):
         return f"Recibo {self.id_recibo} - {self.id_empl.nombre} {self.id_empl.apellido}"
   #Clase horarios debe estar al mismo nivel que Empleado
 class Horarios(models.Model):
-    id_empl = models.ForeignKey('Empleado', on_delete=models.CASCADE, related_name='horarios')
     turno = models.CharField(max_length=20, choices=[('Mañana', 'Mañana'), ('Tarde', 'Tarde')], default='Mañana')
     dia = models.CharField(max_length=10, choices=[('Lunes', 'Lunes'), ('Martes', 'Martes'), ('Miércoles', 'Miércoles'), ('Jueves', 'Jueves'), ('Viernes', 'Viernes')])
-    hora_entrada = models.TimeField()
-    hora_salida = models.TimeField()
+    HORA_ENTRADA_CHOICES = [
+        (time(9, 0), '09:00'),
+        (time(14, 0), '14:00'),
+    ]
+    HORA_SALIDA_CHOICES = [
+        (time(13, 0), '13:00'),
+        (time(18, 0), '18:00'),
+    ]
+    hora_entrada = models.TimeField(choices=HORA_ENTRADA_CHOICES)
+    hora_salida = models.TimeField(choices=HORA_SALIDA_CHOICES)
     cantidad_personal = models.IntegerField(default=1)
 
 
     def __str__(self):
-        return f"Horario {self.id_empl.nombre} {self.id_empl.apellido} - {self.dia}"
+        return f"Horario {self.turno} {self.hora_entrada} - {self.dia}"
 
 class AsignacionHorario(models.Model):
-    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    horario = models.ForeignKey(Horarios, on_delete=models.CASCADE)
+    id_empl = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    id_horario = models.ForeignKey(Horarios, on_delete=models.CASCADE)
     fecha_asignacion = models.DateField(auto_now_add=True)
     estado = models.CharField(max_length=20)
     
