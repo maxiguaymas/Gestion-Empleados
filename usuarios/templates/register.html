@@ -31,14 +31,46 @@
                     </div>
                     <div class="mb-3">
                         <label for="password1" class="form-label">Contraseña: </label>
-                        <input type="password" class="form-control" id="password1" name="password1" required placeholder="Ingrese su contraseña">
+                        <div class="d-flex align-items-center">
+                            <input type="password" class="form-control" id="password1" name="password1" required placeholder="Ingrese su contraseña">
+                            <button type="button"
+                                class="btn btn-outline-secondary btn-sm ms-2"
+                                id="togglePassword1"
+                                tabindex="-1"
+                                style="padding: 2px 6px; border-radius: 50%;">
+                                <span id="icon-eye1">
+                                    <!-- Ojo cerrado SVG por defecto -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                      <ellipse cx="12" cy="12" rx="9" ry="5"/>
+                                      <circle cx="12" cy="12" r="2"/>
+                                      <line x1="4" y1="20" x2="20" y2="4"/>
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
                         <div class="invalid-feedback">
                             La contraseña debe tener al menos 6 caracteres.
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="password2" class="form-label">Confirmar contraseña: </label>
-                        <input type="password" class="form-control" id="password2" name="password2" required placeholder="Confirme su contraseña">
+                        <div class="d-flex align-items-center">
+                            <input type="password" class="form-control" id="password2" name="password2" required placeholder="Confirme su contraseña">
+                            <button type="button"
+                                class="btn btn-outline-secondary btn-sm ms-2"
+                                id="togglePassword2"
+                                tabindex="-1"
+                                style="padding: 2px 6px; border-radius: 50%;">
+                                <span id="icon-eye2">
+                                    <!-- Ojo cerrado SVG por defecto -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                      <ellipse cx="12" cy="12" rx="9" ry="5"/>
+                                      <circle cx="12" cy="12" r="2"/>
+                                      <line x1="4" y1="20" x2="20" y2="4"/>
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
                         <div class="invalid-feedback" id="feedback-password2">
                             <!-- El mensaje se llenará dinámicamente -->
                         </div>
@@ -125,6 +157,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // No mostrar errores al cargar
     btn.disabled = true;
 });
+
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    const eyeOpen = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <ellipse cx="12" cy="12" rx="9" ry="5"/>
+            <circle cx="12" cy="12" r="2"/>
+        </svg>`;
+    const eyeClosed = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <ellipse cx="12" cy="12" rx="9" ry="5"/>
+            <circle cx="12" cy="12" r="2"/>
+            <line x1="4" y1="20" x2="20" y2="4"/>
+        </svg>`;
+    if (input && icon) {
+        icon.innerHTML = eyeClosed;
+        icon.parentElement.addEventListener('click', function () {
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = eyeOpen;
+            } else {
+                input.type = 'password';
+                icon.innerHTML = eyeClosed;
+            }
+        });
+    }
+}
+togglePassword('password1', 'icon-eye1');
+togglePassword('password2', 'icon-eye2');
 </script>
 
 {% endblock %}
