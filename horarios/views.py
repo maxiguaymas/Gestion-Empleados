@@ -1,8 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .forms import HorarioForm
 from empleados.models import Horarios,Empleado,AsignacionHorario
 from django.contrib import messages
+from empleados.views import es_admin
+from django.contrib.auth.decorators import user_passes_test
+
 # Create your views here.
+@user_passes_test(es_admin)
 def cargar_horario(request):
     if request.method == 'POST':
         form = HorarioForm(request.POST)
@@ -13,6 +17,7 @@ def cargar_horario(request):
         form = HorarioForm()
     return render(request, 'cargar_horario.html', {'form': form})
 
+@user_passes_test(es_admin)
 def asignar_horario(request):
     horarios = Horarios.objects.all()
     empleados = Empleado.objects.all()
@@ -38,23 +43,56 @@ def asignar_horario(request):
             messages.info(request, "No se realizaron nuevas asignaciones.")
         return redirect('asignar_horario')
 
+
     return render(request, 'asignar_horario.html', {
         'horarios': horarios,
         'empleados': empleados,
     })
 
+@user_passes_test(es_admin)
 def ver_horarios_asig(request):
+    # Solo permitir acceso a usuarios logeados
+    if not request.user.is_authenticated:
+        messages.error(request, "Debes iniciar sesión para ver los horarios asignados.")
+        return redirect('login')
     horarios = []
-    dni = request.GET.get('dni')
-    if dni:
+    mensaje = None
+    id = request.GET.get('id')
+    print(id)
+    if id:
         try:
-            empleado = Empleado.objects.get(dni=dni)
+            empleado = Empleado.objects.get(id=int(id))
+            print(empleado)
             horarios = AsignacionHorario.objects.filter(id_empl=empleado).select_related('id_empl', 'id_horario')
+            # print(horarios)
+            if not horarios:
+                mensaje = "No hay horarios asignados para este empleado."
         except Empleado.DoesNotExist:
-            horarios = []
+            mensaje = "No se encontró un empleado con ese DNI."
 
     return render(request, 'ver_horarios_asig.html', {
         'horarios': horarios,
+        'mensaje': mensaje,
+        'dni': id,
     })
+
+def mis_horarios(request, id):
+    # Solo permitir acceso a usuarios logeados
+    if not request.user.is_authenticated:
+        messages.error(request, "Debes iniciar sesión para ver los horarios asignados.")
+        return redirect('login')
+    mensaje = ""
+    empleado = get_object_or_404(Empleado, id=id)
+    print(empleado)
+    horarios = AsignacionHorario.objects.filter(id_empl=empleado).select_related('id_empl', 'id_horario')
+    # print(horarios)
+    if not horarios:
+        mensaje = "No hay horarios asignados para este empleado."
+    
+    return render(request, 'mis_horarios.html', {
+        'horarios': horarios,
+        'mensaje': mensaje,
+    })
+
 
 

@@ -1,14 +1,21 @@
+:root {
+    --primary-gradient: linear-gradient(90deg, #0dcaf0 0%, #0d6efd 100%);
+    --navbar-gradient: linear-gradient(90deg, #232526 0%, #414345 100%);
+    --footer-gradient: linear-gradient(135deg, #212529 80%, #343a40 100%);
+    --light-text: #f8f9fa;
+    --dark-text: #222;
+    --modal-border-radius: 1.2rem;
+}
+
 html,
 body {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
+    width: 100%;
+    overflow-x: hidden;
     margin: 0;
     padding: 0;
     min-height: 100vh;
 }
 
-/* Styles Inicio */
 .video-bg {
     position: fixed;
     top: 0;
@@ -44,13 +51,10 @@ body {
     font-weight: normal;
 }
 
-
-/* Styles Inicio */
-
 /* Navbar y Footer */
 #navbar {
-    z-index: 2 !important;
-    background: linear-gradient(90deg, #232526 0%, #414345 100%);
+    z-index: 2;
+    background: var(--navbar-gradient);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -60,7 +64,7 @@ body {
     margin-right: 0.2rem;
     padding-left: 1rem !important;
     padding-right: 1rem !important;
-    color: #f8f9fa !important;
+    color: var(--light-text) !important; /* Bootstrap puede requerir !important aquí por especificidad */
 }
 
 .navbar-nav .nav-link:hover,
@@ -73,10 +77,37 @@ body {
     border-bottom: 1px solid #222;
 }
 
+
+
+.user-initials-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #0d6efd; /* Color primario de Bootstrap, puedes cambiarlo */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+/* Wrapper para alinear iconos de la navbar */
+.nav-icon-wrapper {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Necesario para el badge de notificaciones */
+}
+
+
 #footer {
-    z-index: 1 !important;
+    z-index: 1;
     position: relative;
-    background: linear-gradient(135deg, #212529 80%, #343a40 100%);
+    background: var(--footer-gradient);
 }
 
 #footer a.text-white:hover i {
@@ -87,7 +118,7 @@ body {
 
 /* Estilo profesional para los modales legales */
 .modal-content {
-    border-radius: 1.2rem;
+    border-radius: var(--modal-border-radius);
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
     border: none;
     max-height: 80vh;
@@ -95,10 +126,10 @@ body {
 }
 
 .modal-header {
-    background: linear-gradient(90deg, #0dcaf0 0%, #0d6efd 100%);
+    background: var(--primary-gradient);
     color: #fff;
-    border-top-left-radius: 1.2rem;
-    border-top-right-radius: 1.2rem;
+    border-top-left-radius: var(--modal-border-radius);
+    border-top-right-radius: var(--modal-border-radius);
     border-bottom: none;
 }
 
@@ -109,9 +140,9 @@ body {
 
 .modal-body {
     background: #f8f9fa;
-    color: #222;
-    border-bottom-left-radius: 1.2rem;
-    border-bottom-right-radius: 1.2rem;
+    color: var(--dark-text);
+    border-bottom-left-radius: var(--modal-border-radius);
+    border-bottom-right-radius: var(--modal-border-radius);
     padding: 2rem;
     max-height: 60vh;
     overflow-y: auto;
@@ -161,6 +192,9 @@ body {
         linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
         url('../images/fondo-empleados.avif') no-repeat center center fixed;
     background-size: cover;
+    min-height: 90vh;
+
+
 }
 
 .fondo-semi {
@@ -174,9 +208,9 @@ body {
 
 
 /* Recibos */
-.dataTables_filter {
+/* .dataTables_filter {
     display: none;
-}
+} */
 
 .box-periodo {
     display: inline;
@@ -184,6 +218,38 @@ body {
 }
 
 /* Recibos */
+
+
+/* HORARIOS */
+.container-horarios {
+    min-height: 90vh;
+}
+
+/* recibos */
+.container-ver-recibo {
+    min-height: 90vh;
+}
+
+
+/* Incidentes */
+
+#box-incidentes,
+#box-sanciones,
+#box-det-incidente,
+#box-incidentes-registro {
+    width: 70%;
+}
+
+.btn-det-incid{
+    width: 40%;
+    margin: 0px auto;
+}
+
+/* Asistencias */
+.box-asis,.box-incid{
+    width: 70%; /* Se puede combinar con los selectores de incidentes si el ancho es el mismo */
+    margin: 0px auto;
+}
 
 @media (max-width: 993px) {
 
@@ -205,5 +271,14 @@ body {
         font-size: 0.95rem;
     }
     Agrega más reglas según lo que necesites */
+
+    /* Incidentes */
+
+    #box-incidentes,
+    #box-sanciones,
+    #box-det-incidente,
+    #box-incidentes-registro {
+        width: 85%;
+    }
 
 }

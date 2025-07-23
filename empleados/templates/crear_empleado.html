@@ -20,6 +20,25 @@
                     <form method="post" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
                         {{ form.as_p }}
+                        <h5 class="mt-4">Documentos del Legajo</h5>
+                        <div class="mb-3">
+                            {% for req in requisitos %}
+                            <div class="mb-2">
+                                <label class="form-label">
+                                    {{ req.nombre_doc }}
+                                    {% if req.obligatorio %}
+                                    <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
+                                {% if req.obligatorio %}
+                                <input type="file" name="doc_{{ req.id }}" class="form-control" required>
+                                {% else %}
+                                <input type="file" name="doc_{{ req.id }}" class="form-control">
+                                {% endif %}
+
+                            </div>
+                            {% endfor %}
+                        </div>
                         <button type="submit" class="btn btn-primary w-100">Crear Empleado</button>
                     </form>
                 </div>

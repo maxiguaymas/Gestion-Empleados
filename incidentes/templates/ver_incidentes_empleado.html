@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="py-5" id="empleados">
+    <div class="card shadow-sm fondo-semi box-incid">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Incidentes de: {{ empleado.nombre }} {{ empleado.apellido }}</h3>
+            <a href="{% url 'ver_empleado' empleado.id %}" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> Volver al Perfil
+            </a>
+        </div>
+        <div class="card-body">
+            {% if incidentes_empleado %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nombre del Incidente</th>
+                                <th>Fecha de Ocurrencia</th>
+                                <th>Tipo</th>
+                                <th>Observaciones</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inc_empl in incidentes_empleado %}
+                            <tr>
+                                <td>{{ inc_empl.id_incidente.nombre_incid }}</td>
+                                <td>{{ inc_empl.fecha_ocurrencia|date:"d/m/Y" }}</td>
+                                <td>{{ inc_empl.id_incidente.tipo_incid }}</td>
+                                <td>{{ inc_empl.observaciones|default:"-" }}</td>
+                                <td>
+                                    <a href="{% url 'detalle_incidente' inc_empl.id_incidente.id %}" class="btn btn-info btn-sm" title="Ver Detalle del Incidente">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center" role="alert">
+                    <i class="fas fa-info-circle"></i> No se han registrado incidentes para este empleado.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

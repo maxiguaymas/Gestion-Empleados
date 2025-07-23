@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="py-4 row justify-content-center min-vh-100" id="empleados">
+    <div class="card fondo-semi" id="box-sanciones">
+        <div class="card-header">
+            <h3>Agregar Sanción Directa a un Empleado</h3>
+        </div>
+        <div class="card-body">
+            <!-- Paso 1: Formulario de búsqueda de DNI -->
+            <h5 class="card-title">Buscar Empleado</h5>
+            <form method="get" action="{% url 'agregar_sancion_empleado' %}" class="mb-4 p-3 border rounded bg-light">
+                <div class="input-group">
+                    <input type="text" name="dni" class="form-control" placeholder="Ingrese el DNI del empleado..." value="{{ request.GET.dni|default:'' }}" required>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </div>
+            </form>
+
+            {% if mensaje %}
+                <div class="alert alert-warning">{{ mensaje }}</div>
+            {% endif %}
+
+            <!-- Paso 2: Si se encontró un empleado, mostrar el formulario de sanción -->
+            {% if empleado and form %}
+                <hr>
+                <h4>Aplicar Sanción a: <span class="text-primary">{{ empleado.nombre }} {{ empleado.apellido }}</span></h4>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.id_sancion.label_tag }}
+                        {{ form.id_sancion }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.motivo.label_tag }}
+                        {{ form.motivo }}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">{{ form.fecha_inicio.label_tag }} {{ form.fecha_inicio }}</div>
+                        <div class="col-md-6 mb-3">{{ form.fecha_fin.label_tag }} {{ form.fecha_fin }}</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">Guardar Sanción</button>
+                    <a href="{% url 'ver_todas_sanciones' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}
