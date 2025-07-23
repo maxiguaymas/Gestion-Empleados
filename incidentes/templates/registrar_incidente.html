@@ -1,0 +1,76 @@
+{% extends 'base.html' %} <!-- Asegúrate que el nombre de tu base sea correcto -->
+
+
+{% block content %}
+<main class="py-4 min-vh-100 row justify-content-center" id="empleados">
+    <div class="card shadow fondo-semi" id="box-incidentes-registro">
+        <div class="card-header">
+            <h2 class="card-title">Registrar Nuevo Incidente</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.nombre_incid.id_for_label }}" class="form-label">{{ form.nombre_incid.label }}</label>
+                        {{ form.nombre_incid }}
+                        {% if form.nombre_incid.errors %}<div class="invalid-feedback d-block">{{ form.nombre_incid.errors }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.fecha_incid.id_for_label }}" class="form-label">{{ form.fecha_incid.label }}</label>
+                        {{ form.fecha_incid }}
+                         {% if form.fecha_incid.errors %}<div class="invalid-feedback d-block">{{ form.fecha_incid.errors }}</div>{% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.tipo_incid.id_for_label }}" class="form-label">{{ form.tipo_incid.label }}</label>
+                    {{ form.tipo_incid }}
+                    {% if form.tipo_incid.errors %}<div class="invalid-feedback d-block">{{ form.tipo_incid.errors }}</div>{% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.descripcion_incid.id_for_label }}" class="form-label">{{ form.descripcion_incid.label }}</label>
+                    {{ form.descripcion_incid }}
+                    {% if form.descripcion_incid.errors %}<div class="invalid-feedback d-block">{{ form.descripcion_incid.errors }}</div>{% endif %}
+                </div>
+
+                <hr>
+                
+                <h4 class="mt-4">Asociar Empleados</h4>
+                <div class="mb-3">
+                    <label for="{{ form.empleados_involucrados.id_for_label }}" class="form-label">{{ form.empleados_involucrados.label }}</label>
+                    <p class="form-text">Puedes seleccionar varios empleados manteniendo presionada la tecla Ctrl (o Cmd en Mac).</p>
+                    {{ form.empleados_involucrados }}
+                    {% if form.empleados_involucrados.errors %}<div class="invalid-feedback d-block">{{ form.empleados_involucrados.errors }}</div>{% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.observaciones.id_for_label }}" class="form-label">{{ form.observaciones.label }}</label>
+                    {{ form.observaciones }}
+                    {% if form.observaciones.errors %}<div class="invalid-feedback d-block">{{ form.observaciones.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.estado_incid }}
+                    <label class="form-check-label" for="{{ form.estado_incid.id_for_label }}">
+                        {{ form.estado_incid.label }}
+                    </label>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'ver_incidentes' %}" class="btn btn-secondary me-2">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Registrar Incidente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

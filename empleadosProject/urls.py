@@ -28,6 +28,9 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path('recibos/', include('recibos.urls')),
     path('horarios/', include('horarios.urls')),
+    path('sanciones/', include('sanciones.urls')),
+    path('incidentes/', include('incidentes.urls')),
+    path('asistencia/', include('asistencia.urls')),
 ]
 
 if settings.DEBUG:

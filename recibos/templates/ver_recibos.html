@@ -5,7 +5,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="pt-4 min-vh-100 d-flex flex-column align-items-center" id="empleados">
+<main class="pt-4 min-vh-100 d-flex flex-column align-items-center" id="empleados">
     <h2 class="mb-4">Recibos de Sueldos</h2>
 
     <!-- Formulario de búsqueda -->
@@ -73,9 +73,9 @@
                 style="max-width: 220px; display: none;">
         </div>
     </div>
-</div>
-{% endif %}
-</div>
+    {% endif %}
+</main>
+
 
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
