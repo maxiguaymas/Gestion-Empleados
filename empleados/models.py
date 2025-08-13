@@ -11,6 +11,7 @@ def validar_mayor_18(value):
     if edad < 18:
         raise ValidationError('El empleado debe ser mayor de 18 años.')
 
+# MODELS EMPLEADOS
 class Empleado(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='empleado')
     nombre = models.CharField(max_length=100)
@@ -32,7 +33,30 @@ class Empleado(models.Model):
         return f"{self.nombre} {self.apellido} - {self.dni}"
     
 
-   # Clase Recibo_Sueldos debe estar al mismo nivel que Empleado
+class RequisitoDocumento(models.Model):
+    nombre_doc = models.CharField(max_length=100)
+    estado_doc = models.BooleanField(default=True)  # Activo/Inactivo
+    obligatorio = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre_doc
+
+class Legajo(models.Model):
+    id_empl = models.OneToOneField('Empleado', on_delete=models.CASCADE, related_name='legajo')
+    estado_leg = models.CharField(max_length=50)
+    fecha_creacion_leg = models.DateField(auto_now_add=True)
+    nro_leg = models.IntegerField(unique=True)
+    fecha_modificacion_leg = models.DateField(auto_now=True)
+
+class Documento(models.Model):
+    id_leg = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+    id_requisito = models.ForeignKey(RequisitoDocumento, on_delete=models.CASCADE)
+    ruta_archivo = models.FileField(upload_to='legajos/documentos/')
+    fecha_hora_subida = models.DateTimeField(auto_now_add=True)
+    descripcion_doc = models.CharField(max_length=255, blank=True, null=True)
+    estado_doc = models.BooleanField(default=True)
+
+# MODELS DE RECIBOS
 class Recibo_Sueldos(models.Model):
     id_empl = models.ForeignKey('Empleado', on_delete=models.CASCADE, related_name='recibos')
     fecha_emision = models.DateField()
@@ -43,6 +67,8 @@ class Recibo_Sueldos(models.Model):
     def __str__(self):
         return f"Recibo {self.id_recibo} - {self.id_empl.nombre} {self.id_empl.apellido}"
   #Clase horarios debe estar al mismo nivel que Empleado
+  
+# MODELS DE HORARIOS
 class Horarios(models.Model):
     turno = models.CharField(max_length=20, choices=[('Mañana', 'Mañana'), ('Tarde', 'Tarde')], default='Mañana')
     dia = models.CharField(max_length=10, choices=[('Lunes', 'Lunes'), ('Martes', 'Martes'), ('Miércoles', 'Miércoles'), ('Jueves', 'Jueves'), ('Viernes', 'Viernes')])
@@ -66,7 +92,95 @@ class AsignacionHorario(models.Model):
     id_empl = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     id_horario = models.ForeignKey(Horarios, on_delete=models.CASCADE)
     fecha_asignacion = models.DateField(auto_now_add=True)
-    estado = models.CharField(max_length=20)
+    estado = models.BooleanField(default=True)
     
     def __str__(self):
         return f"Asignación de {self.empleado.nombre} {self.empleado.apellido} - {self.horario.dia} {self.horario.turno}"
+    
+# INCIDENTES
+class Incidente(models.Model):
+    fecha_incid = models.DateField()
+    descripcion_incid = models.CharField(max_length=255)
+    nombre_incid = models.CharField(max_length=255)
+    tipo_incid = models.CharField(max_length=255)
+    estado_incid = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre_incid
+
+class IncidenteEmpleadoDescargo(models.Model):
+    id_incidente = models.ForeignKey(Incidente, on_delete=models.CASCADE)
+    id_empl = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    fecha_ocurrencia = models.DateField()
+    observaciones = models.CharField(max_length=255)
+    responsable_registro = models.CharField(max_length=255)
+    estado = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('id_incidente', 'id_empl') # Assuming composite key, or just a unique ID for the relationship
+                                                    # Based on the ERD, it seems id_incid_empl is the primary key.
+
+    def __str__(self):
+        return f"Inc. {self.id_incidente.nombre_incid} - Emp. {self.id_emp.nombre_emp}"
+
+
+class Descargo(models.Model):
+    fecha_descargo = models.DateField()
+    contenido_descargo = models.CharField(max_length=255)
+    ruta_archivo_descargo = models.CharField(max_length=255)
+    estado_descargo = models.BooleanField(default=True)
+    id_incid_empl = models.ForeignKey(IncidenteEmpleadoDescargo, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Descargo {self.id_descargo} for Inc. Emp. {self.id_incid_empl.id_incid_empl}"
+
+
+# MODELS DE SANCIONES
+
+class Sancion(models.Model):
+    nombre = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=50)
+    fecha = models.DateField()
+    descripcion = models.TextField()
+    estado = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre
+
+class SancionEmpleado(models.Model):
+    id_empl = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='sanciones_empleado')
+    id_sancion = models.ForeignKey(Sancion, on_delete=models.CASCADE)
+    incidente_asociado = models.ForeignKey(IncidenteEmpleadoDescargo, on_delete=models.SET_NULL, null=True, blank=True, related_name='sanciones_generadas')
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField(blank=True, null=True)
+    motivo = models.CharField(max_length=255)
+    responsable = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = ('id_empl', 'id_sancion', 'fecha_inicio')
+        verbose_name = "Sanción de Empleado"
+        verbose_name_plural = "Sanciones de Empleados"
+
+    @property
+    def estado(self):
+        """
+        Determina el estado de la sanción dinámicamente.
+        Devuelve True (Activa) si la fecha actual es menor o igual a la fecha_fin.
+        Si no hay fecha_fin, se considera siempre activa.
+        """
+        if self.fecha_fin is None:
+            return True
+        return timezone.now().date() <= self.fecha_fin
+
+    def __str__(self):
+        return f"Sancion {self.id_sancion.nombre} para {self.id_empl.nombre} {self.id_empl.apellido}"
+
+class Resolucion(models.Model):
+    sancion_empleado = models.ForeignKey(SancionEmpleado, on_delete=models.CASCADE, related_name='resoluciones')
+    fecha_resolucion = models.DateField()
+    descripcion = models.CharField(max_length=255)
+    responsable = models.CharField(max_length=255)
+    estado = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Resolucion para sanción ID: {self.sancion_empleado.id}"

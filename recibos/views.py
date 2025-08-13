@@ -56,6 +56,25 @@ def ver_recibos(request):
         'mensaje': mensaje,
         'dni': id,
     })
+
+
+def ver_recibos(request, id):
+    # Solo permitir acceso a usuarios logeados
+    if not request.user.is_authenticated:
+        messages.error(request, "Debes iniciar sesión para ver los recibos.")
+        return redirect('login')
+    recibos = []
+    mensaje = None
+    
+    empleado = Empleado.objects.get(id=int(id))
+    recibos = Recibo_Sueldos.objects.filter(id_empl=empleado)
+    if not recibos:
+        mensaje = "No hay recibos para este empleado."
+
+    return render(request, 'mis_recibos.html', {
+        'recibos': recibos,
+        'mensaje': mensaje,
+    })
     
 def ajax_buscar_empleado(request):
     q = request.GET.get('q', '')
