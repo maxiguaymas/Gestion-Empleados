@@ -8,4 +8,4 @@ def has_group(user, group_name):
     """
     Verifica si un usuario pertenece a un grupo específico.
     """
-    return user.groups.filter(name=group_name).exists()
+    return user.groups.filter(name__iexact=group_name).exists()
