@@ -7,13 +7,11 @@
 <h2 class="mt-4">Pasos para clonar el proyecto:</h2>
 
 <ol class="list-group list-group-numbered mb-4">
-  <li class="list-group-item">git clone https://github.com/maxiguaymas/empleados-proy.git</li>
-  <li class="list-group-item">py -m venv env</li>
-  <li class="list-group-item">./env/Scripts/activate</li>
-  <li class="list-group-item">pip install django</li>
+  <li class="list-group-item">Clona el repositorio: <code>git clone https://github.com/maxiguaymas/empleados-proy.git</code></li>
+  <li class="list-group-item">Navega a la carpeta del proyecto: <code>cd empleados-proy</code></li>
+  <li class="list-group-item">Crea y activa un entorno virtual. Para Windows: <code>py -m venv env</code> y luego <code>.\env\Scripts\activate</code></li>
+  <li class="list-group-item">Instala todas las dependencias: <code>pip install -r requirements.txt</code></li>
   <li class="list-group-item">py manage.py makemigrations</li>
   <li class="list-group-item">py manage.py migrate</li>
+  <li class="list-group-item">Ejecuta el servidor de desarrollo: <code>py manage.py runserver</code></li>
 </ol>
-
-
-
