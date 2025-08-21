@@ -20,6 +20,27 @@
                     <form method="post" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
                         {{ form.as_p }}
+                        <h5 class="mt-4">Documentos del Legajo</h5>
+                        <div class="mb-3">
+                            {% for req in requisitos %}
+                            <div class="mb-2">
+                                <label class="form-label">
+                                    {{ req.nombre_doc }}
+                                    {% if req.obligatorio %}
+                                    <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
+                                {% for doc in documentos %}
+                                {% if doc.id_requisito.id == req.id and doc.ruta_archivo %}
+                                <div>
+                                    <a href="{{ doc.ruta_archivo.url }}" target="_blank">Ver archivo actual</a>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                <input type="file" name="doc_{{ req.id }}" class="form-control">
+                            </div>
+                            {% endfor %}
+                        </div>
                         <button type="submit" class="btn btn-primary w-100"
                             onclick="return confirmarEdicion(event);">Editar Empleado</button>
                         <a href="{% url 'ver_empleados' %}" class="btn btn-secondary w-100 mt-2">Volver</a>

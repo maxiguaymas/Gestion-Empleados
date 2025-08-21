@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import login_required
 from .forms import EmpleadoForm
 from .models import Empleado
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import user_passes_test
+from empleados.models import Legajo, Documento, RequisitoDocumento
 
 def es_admin(user):
     return user.groups.filter(name='Administrador').exists() or user.is_superuser
@@ -15,12 +17,24 @@ def index(request):
 
 @login_required
 @user_passes_test(es_admin)
+@login_required
+@user_passes_test(es_admin)
 def crear_empleado(request):
     form = EmpleadoForm()
+    requisitos = RequisitoDocumento.objects.all()
+    error = None
 
     if request.method == 'POST':
         form = EmpleadoForm(request.POST, request.FILES)
-        if form.is_valid():
+        archivos = request.FILES
+        # 1. Validar documentos obligatorios
+        for req in requisitos:
+            if req.obligatorio and not archivos.get(f'doc_{req.id}'):
+                error = f"El documento '{req.nombre_doc}' es obligatorio."
+                break
+
+        if not error and form.is_valid():
+            # 2. Crear usuario, empleado, legajo y documentos
             empleado = form.save(commit=False)
             dni = form.cleaned_data['dni']
             grupo = form.cleaned_data['grupo']
@@ -29,30 +43,71 @@ def crear_empleado(request):
             user.save()
             empleado.user = user
             empleado.save()
+
+            nro_leg = Legajo.objects.count() + 1
+            legajo = Legajo.objects.create(
+                id_empl=empleado,
+                estado_leg='Activo',
+                nro_leg=nro_leg
+            )
+
+            for req in requisitos:
+                archivo = archivos.get(f'doc_{req.id}')
+                Documento.objects.create(
+                    id_leg=legajo,
+                    id_requisito=req,
+                    ruta_archivo=archivo if archivo else None,
+                    estado_doc=bool(archivo)
+                )
             return redirect('ver_empleados')
         else:
-            return render(request, 'crear_empleado.html', {'form': form, 'error': 'Por favor corrige los errores.'})
+            return render(request, 'crear_empleado.html', {'form': form, 'error': error or 'Por favor corrige los errores.', 'requisitos': requisitos})
 
-    return render(request, 'crear_empleado.html', {'form': form})
+    return render(request, 'crear_empleado.html', {'form': form, 'requisitos': requisitos})
+
 
 @login_required
 @user_passes_test(es_admin)
 def editar_empleado(request, id):
-    try:
-        empleado = Empleado.objects.get(id=id)
-    except Empleado.DoesNotExist:
-        return redirect('index')
-    form = EmpleadoForm(instance=empleado)
+    empleado = get_object_or_404(Empleado, id=id)
+    legajo = getattr(empleado, 'legajo', None)
+    documentos = Documento.objects.filter(id_leg=legajo) if legajo else []
+    requisitos = RequisitoDocumento.objects.all()
+    error = None
 
     if request.method == 'POST':
-        form = EmpleadoForm(request.POST,request.FILES, instance=empleado)
+        form = EmpleadoForm(request.POST, request.FILES, instance=empleado)
+        archivos = request.FILES
         if form.is_valid():
             form.save()
-            return redirect('index')
+            # Actualizar documentos si se suben nuevos archivos
+            for req in requisitos:
+                archivo = archivos.get(f'doc_{req.id}')
+                if archivo and legajo:
+                    doc = Documento.objects.filter(id_leg=legajo, id_requisito=req).first()
+                    if doc:
+                        doc.ruta_archivo = archivo
+                        doc.estado_doc = True
+                        doc.save()
+            return redirect('ver_empleados')
         else:
-            return render(request, 'editar_empleado.html', {'form': form, 'error': 'Por favor corrige los errores.'})
+            return render(request, 'editar_empleado.html', {
+                'form': form,
+                'error': 'Por favor corrige los errores.',
+                'documentos': documentos,
+                'requisitos': requisitos,
+                'legajo': legajo,
+            })
 
-    return render(request, 'editar_empleado.html', {'form': form})
+    else:
+        form = EmpleadoForm(instance=empleado)
+
+    return render(request, 'editar_empleado.html', {
+        'form': form,
+        'documentos': documentos,
+        'requisitos': requisitos,
+        'legajo': legajo,
+    })
 
 @login_required
 @user_passes_test(es_admin)
@@ -70,8 +125,18 @@ def ver_empleados(request):
     return render(request, 'empleados.html', {'empleados': empleados})
 
 @login_required
-@user_passes_test(es_admin)
 def ver_empleado(request, id):
     empleado = get_object_or_404(Empleado, id=id)
-    return render(request, 'ver_empleado.html', {'empleado': empleado})
+    # Lógica de permisos:
+    # Permitir si es admin O si el empleado está editando su propio perfil.
+    es_propietario = hasattr(request.user, 'empleado') and request.user.empleado.id == empleado.id
+    if not (es_admin(request.user) or es_propietario):
+        raise PermissionDenied("No tienes permiso para ver este perfil.")
+    legajo = getattr(empleado, 'legajo', None)
+    documentos = Documento.objects.filter(id_leg=legajo) if legajo else []
+    return render(request, 'ver_empleado.html', {
+        'empleado': empleado,
+        'legajo': legajo,
+        'documentos': documentos,
+    })
     

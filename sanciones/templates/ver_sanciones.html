@@ -1,0 +1,60 @@
+<head>
+    <title>Ver Sanciones</title>
+</head>
+{% extends 'base.html' %}
+{% block content %}
+<main class="py-5 min-vh-100" id="empleados">
+    <div class="container fondo-semi">
+        <h2 class="mb-4">Sanciones de {{ empleado.nombre }} {{ empleado.apellido }}</h2>
+        <a href="{% url 'agregar_sancion_empleado' %}?dni={{ empleado.dni }}" class="btn btn-primary mb-3">Agregar Sanción</a>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Fecha Sanción</th>
+                        <th>Motivo</th>
+                        <th>Tipo</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th>Responsable</th>
+                        <th>Estado</th>
+                        <th>Resolución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sancion in sanciones %}
+                    <tr>
+                        <td>{{ sancion.id_sancion.fecha }}</td>
+                        <td>{{ sancion.motivo }}</td>
+                        <td>{{ sancion.id_sancion.tipo }}</td>
+                        <td>{{ sancion.fecha_inicio }}</td>
+                        <td>{{ sancion.fecha_fin|default:"-" }}</td>
+                        <td>{{ sancion.responsable }}</td>
+                        <td>
+                            {% if sancion.estado %}
+                                <span class="badge bg-success">Activa</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Finalizada</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if sancion.resoluciones.all %}
+                                <a href="#" class="btn btn-sm btn-outline-info">Ver</a>
+                            {% elif sancion.estado %}
+                                <a href="{% url 'agregar_resolucion' sancion.id %}" class="btn btn-sm btn-success">Agregar Resolución</a>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No hay sanciones registradas.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+{% endblock %}
