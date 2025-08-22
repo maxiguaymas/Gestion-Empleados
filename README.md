@@ -14,5 +14,6 @@
   <li class="list-group-item">py manage.py makemigrations</li>
   <li class="list-group-item">py manage.py migrate</li>
   <li class="list-group-item">python manage.py loaddata empleados/fixtures/sanciones.json</li>
+  <li class="list-group-item">python manage.py loaddata empleados/fixtures/req_documentos.json</li>
   <li class="list-group-item">Ejecuta el servidor de desarrollo: <code>py manage.py runserver</code></li>
 </ol>
