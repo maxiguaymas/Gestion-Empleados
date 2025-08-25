@@ -16,12 +16,6 @@
         </div>
     </form>
 
-    <!-- Mensaje de alerta -->
-    <!-- {% if mensaje %}
-    <div class="alert alert-info" role="alert">
-        {{ mensaje }}
-    </div>
-    {% endif %} -->
 
     <!-- Tabla de recibos -->
     
@@ -104,17 +98,11 @@
         // Inicialización de DataTables con filtro personalizado
         // Usamos la clase .datatable-spanish que definimos en la tabla
         var table = $('.datatable-spanish').DataTable({
+            searching: false, // Mantenemos deshabilitado el campo de búsqueda general
+            lengthChange: true, // Habilita el selector de "Mostrar X entradas"
+            dom: 'lrt<"d-flex justify-content-between mt-2"ip>', // Estructura: l=length, r=processing, t=table, i=info, p=pagination
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
-            },
-            // Añadimos el input de filtro de periodo dinámicamente
-            initComplete: function () {
-                var input = $('<input type="text" class="form-control ms-3" placeholder="Filtrar por periodo (YYYY-MM)" style="width: 200px;">')
-                    .appendTo($('.dataTables_length'))
-                    .on('keyup change', function () {
-                        // Filtra por la columna 4 (Periodo), contando desde 0
-                        table.column(4).search(this.value).draw();
-                    });
             }
         });
     });
