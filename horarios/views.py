@@ -21,6 +21,8 @@ def cargar_horario(request):
 def asignar_horario(request):
     horarios = Horarios.objects.all()
     empleados = Empleado.objects.all()
+    
+    
 
     if request.method == 'POST':
         asignaciones_realizadas = 0
@@ -51,29 +53,14 @@ def asignar_horario(request):
 
 @user_passes_test(es_admin)
 def ver_horarios_asig(request):
-    # Solo permitir acceso a usuarios logeados
-    if not request.user.is_authenticated:
-        messages.error(request, "Debes iniciar sesión para ver los horarios asignados.")
-        return redirect('login')
-    horarios = []
-    mensaje = None
-    id = request.GET.get('id')
-    print(id)
-    if id:
-        try:
-            empleado = Empleado.objects.get(id=int(id))
-            print(empleado)
-            horarios = AsignacionHorario.objects.filter(id_empl=empleado).select_related('id_empl', 'id_horario')
-            # print(horarios)
-            if not horarios:
-                mensaje = "No hay horarios asignados para este empleado."
-        except Empleado.DoesNotExist:
-            mensaje = "No se encontró un empleado con ese DNI."
-
+    """
+    Muestra una tabla con todos los horarios asignados a todos los empleados.
+    La plantilla utiliza DataTables para permitir la búsqueda y paginación.
+    """
+    # Obtenemos todas las asignaciones y optimizamos la consulta con select_related
+    horarios = AsignacionHorario.objects.all().select_related('id_empl', 'id_horario')
     return render(request, 'ver_horarios_asig.html', {
         'horarios': horarios,
-        'mensaje': mensaje,
-        'dni': id,
     })
 
 def mis_horarios(request, id):
@@ -93,6 +80,3 @@ def mis_horarios(request, id):
         'horarios': horarios,
         'mensaje': mensaje,
     })
-
-
-

@@ -25,7 +25,6 @@ urlpatterns = [
     path('auth/', include('usuarios.urls')),
     path('empleados/', include('empleados.urls')),
     path('', RedirectView.as_view(url='/empleados/inicio/', permanent=False)),
-    path('captcha/', include('captcha.urls')),
     path('recibos/', include('recibos.urls')),
     path('horarios/', include('horarios.urls')),
     path('sanciones/', include('sanciones.urls')),

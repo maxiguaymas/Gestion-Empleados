@@ -43,15 +43,6 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="id_captcha_1" class="form-label">Captcha:</label>
-                            {{ form.captcha }}
-                            {% if form.captcha.errors %}
-                            <div class="invalid-feedback d-block">
-                                {{ form.captcha.errors }}
-                            </div>
-                            {% endif %}
-                        </div>
                         {% if not bloqueado %}
                         <button type="submit" class="btn btn-primary w-100">Ingresar</button>
                         {% endif %}
