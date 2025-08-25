@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-
 {% load auth_extras %}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Crud django{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Crud django</title>
 </head>
-
 
 <body>
     <nav id="navbar" class="navbar navbar-expand navbar-dark">
@@ -30,6 +28,7 @@
                         <li><h6 class="dropdown-header">Empleados</h6></li>
                         <li><a class="dropdown-item" href="{% url 'crear_empleado' %}">Crear Empleado</a></li>
                         <li><a class="dropdown-item" href="{% url 'ver_empleados' %}">Ver Empleados</a></li>
+                        <li><a class="dropdown-item" href="{% url 'grafico_empleados' %}">Gráfico Empleados</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><h6 class="dropdown-header">Recibos</h6></li>
                         <li><a class="dropdown-item" href="{% url 'cargar_recibo' %}">Cargar Recibos</a></li>

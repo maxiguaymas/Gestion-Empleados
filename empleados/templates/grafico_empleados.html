@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Gráfico{% endblock %}
+
+{% block content %}
+    <h1>Empleados Activos e Inactivos</h1>
+    <div>
+        <a href="{% url 'grafico_empleados_pdf' %}" class="btn btn-primary" target="_blank">Descargar PDF</a>
+    </div>
+    <div style="margin-top: 20px;">
+        {{ grafico|safe }}
+    </div>
+{% endblock %}
