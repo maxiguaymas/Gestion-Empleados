@@ -16,50 +16,60 @@
 <body>
     <nav id="navbar" class="navbar navbar-expand navbar-dark">
         <div class="container-fluid px-3">
-            <!-- Izquierda: Menú principal desplegable -->
-            <ul class="navbar-nav">
-                {% if user.is_authenticated and user|has_group:"administrador" %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" id="mainMenuDropdown" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false" title="Menú Principal">
-                        <i class="bi bi-list fs-4"></i>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="mainMenuDropdown">
-                        <li><h6 class="dropdown-header">Empleados</h6></li>
-                        <li><a class="dropdown-item" href="{% url 'crear_empleado' %}">Crear Empleado</a></li>
-                        <li><a class="dropdown-item" href="{% url 'ver_empleados' %}">Ver Empleados</a></li>
-                        <li><a class="dropdown-item" href="{% url 'grafico_empleados' %}">Gráfico Empleados</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><h6 class="dropdown-header">Recibos</h6></li>
-                        <li><a class="dropdown-item" href="{% url 'cargar_recibo' %}">Cargar Recibos</a></li>
-                        <li><a class="dropdown-item" href="{% url 'ver_recibos' %}">Ver Recibos</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><h6 class="dropdown-header">Horarios</h6></li>
-                        <li><a class="dropdown-item" href="{% url 'cargar_horario' %}">Cargar Horarios</a></li>
-                        <li><a class="dropdown-item" href="{% url 'asignar_horario' %}">Asignar Horarios</a></li>
-                        <li><a class="dropdown-item" href="{% url 'ver_horarios_asig' %}">Ver Horarios Asignados</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><h6 class="dropdown-header">Sanciones</h6></li>
-                        <li><a class="dropdown-item" href="{% url 'agregar_sancion_empleado' %}">Registrar Sanción</a></li>
-                        <li><a class="dropdown-item" href="{% url 'ver_todas_sanciones' %}">Ver Sanciones</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><h6 class="dropdown-header">Incidentes</h6></li>
-                        <li><a class="dropdown-item" href="{% url 'registrar_incidente' %}">Registrar Incidente</a></li>
-                        <li><a class="dropdown-item" href="{% url 'ver_incidentes' %}">Ver Incidentes</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><h6 class="dropdown-header">Asistencia</h6></li>
-                        <li><a class="dropdown-item" href="{% url 'registrar_rostro' %}">Registrar Rostro</a></li>
-                        <li><a class="dropdown-item" href="{% url 'marcar_asistencia' %}">Marcar Asistencia</a></li>
-                    </ul>
-                </li>
-                {% endif %}
-            </ul>
-
             <!-- Logo -->
             <a class="navbar-brand" href="{% url 'index' %}">
                 <img src="{% static 'images/logo-nuevas-energias-v2.png' %}" alt="Logo" width="80" height="60"
                     class="d-inline-block align-text-top shadow-sm">
             </a>
+
+            <!-- Izquierda: Menú principal por categorías -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto">
+                    {% if user.is_authenticated and user|has_group:"administrador" %}
+                    <!-- Empleados -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="empleadosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Empleados</a>
+                        <ul class="dropdown-menu" aria-labelledby="empleadosDropdown">
+                            <li><a class="dropdown-item" href="{% url 'crear_empleado' %}">Crear Empleado</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ver_empleados' %}">Ver Empleados</a></li>
+                        </ul>
+                    </li>
+                    <!-- Recibos -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="recibosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Recibos</a>
+                        <ul class="dropdown-menu" aria-labelledby="recibosDropdown">
+                            <li><a class="dropdown-item" href="{% url 'cargar_recibo' %}">Cargar Recibos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ver_recibos' %}">Ver Recibos</a></li>
+                        </ul>
+                    </li>
+                    <!-- Horarios -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="horariosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Horarios</a>
+                        <ul class="dropdown-menu" aria-labelledby="horariosDropdown">
+                            <li><a class="dropdown-item" href="{% url 'cargar_horario' %}">Cargar Horarios</a></li>
+                            <li><a class="dropdown-item" href="{% url 'asignar_horario' %}">Asignar Horarios</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ver_horarios_asig' %}">Ver Horarios Asignados</a></li>
+                        </ul>
+                    </li>
+                    <!-- Sanciones -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="sancionesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sanciones</a>
+                        <ul class="dropdown-menu" aria-labelledby="sancionesDropdown">
+                            <li><a class="dropdown-item" href="{% url 'agregar_sancion_empleado' %}">Registrar Sanción</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ver_todas_sanciones' %}">Ver Sanciones</a></li>
+                        </ul>
+                    </li>
+                    <!-- Incidentes -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="incidentesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Incidentes</a>
+                        <ul class="dropdown-menu" aria-labelledby="incidentesDropdown">
+                            <li><a class="dropdown-item" href="{% url 'registrar_incidente' %}">Registrar Incidente</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ver_incidentes' %}">Ver Incidentes</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
 
             <!-- Derecha: Notificaciones y Perfil -->
             <ul class="navbar-nav ms-auto">
