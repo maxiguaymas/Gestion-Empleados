@@ -9,13 +9,6 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import user_passes_test
 from empleados.models import Legajo, Documento, RequisitoDocumento
 
-# Agrega estas importaciones
-import pandas as pd
-import plotly.express as px
-from xhtml2pdf import pisa
-from django.template.loader import get_template
-from django.http import HttpResponse
-
 def es_admin(user):
     return user.groups.filter(name='Administrador').exists() or user.is_superuser
 # Create your views here.
