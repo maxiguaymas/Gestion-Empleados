@@ -9,4 +9,6 @@ urlpatterns = [
     path('eliminar/<int:id>/', views.eliminar_empleado, name='eliminar_empleado'),
     path('ver/', views.ver_empleados, name='ver_empleados'),
     path('ver/<int:id>/', views.ver_empleado, name='ver_empleado'),
+    path('grafico-empleados/', views.grafico_empleados_activos_inactivos, name='grafico_empleados'),
+    path('grafico-empleados/pdf/', views.grafico_empleados_pdf, name='grafico_empleados_pdf'),
 ]
