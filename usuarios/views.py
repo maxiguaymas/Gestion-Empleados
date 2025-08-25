@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User,Group
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .forms import CaptchaAuthenticationForm
 from django.utils import timezone
 from datetime import timedelta
 
@@ -24,7 +23,7 @@ def login(request):
             delta = blocked_until_time - timezone.now()
             minutos, segundos = divmod(delta.seconds, 60)
             return render(request, 'login.html', {
-                'form': CaptchaAuthenticationForm(),
+                'form': AuthenticationForm(),
                 'error': f'Has superado el número máximo de intentos. Inténtalo de nuevo en <span id="tiempo-bloqueo">{minutos} m y {segundos} s</span>.',
                 'bloqueado': True
             })
@@ -34,9 +33,9 @@ def login(request):
             # No reinicies block_count aquí
 
     if request.method == 'GET':
-        return render(request, 'login.html', {'form': CaptchaAuthenticationForm()})
+        return render(request, 'login.html', {'form': AuthenticationForm()})
 
-    form = CaptchaAuthenticationForm(request, data=request.POST)
+    form = AuthenticationForm(request, data=request.POST)
     if not form.is_valid():
         request.session['login_attempts'] += 1
         if request.session['login_attempts'] >= 3:
@@ -49,7 +48,7 @@ def login(request):
             delta = blocked_until - timezone.now()
             minutos, segundos = divmod(delta.seconds, 60)
             return render(request, 'login.html', {
-                'form': CaptchaAuthenticationForm(),
+                'form': AuthenticationForm(),
                 'error': f'Has superado el número máximo de intentos. Inténtalo de nuevo en <span id="tiempo-bloqueo">{minutos} m y {segundos} s</span>.',
                 'bloqueado': True
             })
