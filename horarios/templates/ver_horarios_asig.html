@@ -1,36 +1,19 @@
-<head>
-    <title>Horarios Asignados</title>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-</head>
 {% extends "base.html" %}
+
+{% block page_title %}Horarios Asignados{% endblock %}
 
 {% block content %}
 <main class="py-5 container-horarios d-flex flex-column align-items-center" id="empleados">
     <h2 class="mb-4">Horarios Asignados</h2>
 
-    <!-- Formulario de búsqueda -->
-    <form method="get" class="row g-3 mb-4">
-        <div class="col-auto">
-            <select id="dni-select" name="id" class="form-control" style="width: 250px;"></select>
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Buscar</button>
-        </div>
-    </form>
-
-    <!-- Mensaje de alerta -->
-    {% if mensaje %}
-    <div class="alert alert-info" role="alert">
-        {{ mensaje }}
-    </div>
-    {% endif %}
-
-
-
-    {% if horarios %}
+    <!--
+        NOTA: Se ha reemplazado el formulario de búsqueda por una tabla interactiva.
+        Ahora se muestran todos los horarios y puedes usar el campo "Buscar" de la tabla
+        para filtrar por empleado, DNI, día, etc.
+    -->
     <div class="col-lg-10 fondo-semi">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered align-middle">
+        <div class="table-responsive shadow rounded">
+            <table class="table table-striped table-bordered align-middle datatable-spanish">
                 <thead class="table-dark">
                     <tr>
                         <th>Empleado</th>
@@ -41,6 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {# La vista debe pasar la lista completa de horarios asignados #}
                     {% for horario in horarios %}
                     <tr>
                         <td>{{ horario.id_empl.nombre }} {{ horario.id_empl.apellido }}</td>
@@ -54,38 +38,5 @@
             </table>
         </div>
     </div>
-    {% endif %}
 </main>
-
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<!-- Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/es.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#dni-select').select2({
-            placeholder: "Buscar empleado por DNI...",
-            allowClear: true,
-            language: "es",
-            ajax: {
-                url: "{% url 'ajax_buscar_empleado' %}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term // término de búsqueda
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data.results
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 2,
-        });
-    });
-</script>
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from empleados.models import Recibo_Sueldos, Empleado
+from empleados.models import Recibo_Sueldos as Recibo, Empleado
 from .forms import ReciboSueldoForm  # Debes crear este formulario
 from empleados.views import es_admin
 from django.contrib.auth.decorators import user_passes_test
@@ -29,43 +29,38 @@ def cargar_recibo(request):
     return render(request, 'cargar_recibo.html', {'form': form})
 
 @user_passes_test(es_admin)
-def ver_recibos(request, id=None):
-    # Solo permitir acceso a usuarios logeados
+def ver_recibos(request):
+    """
+    Vista para que un administrador vea y filtre recibos de sueldo.
+    Filtra por empleado si se pasa un 'id' en los parámetros GET.
+    """
     if not request.user.is_authenticated:
         messages.error(request, "Debes iniciar sesión para ver los recibos.")
         return redirect('login')
-    recibos = []
-    mensaje = None
 
-    if id is not None:
-        # Vista para /recibos/ver/<id>/
+    # Empezamos con una consulta vacía. Los recibos solo se mostrarán después de una búsqueda.
+    recibos = Recibo.objects.none()
+    mensaje = None
+    empleado_seleccionado = None
+
+    empleado_id = request.GET.get('id')
+
+    if empleado_id:
         try:
-            empleado = Empleado.objects.get(id=int(id))
-            recibos = Recibo_Sueldos.objects.filter(id_empl=empleado)
-            if not recibos:
-                mensaje = "No hay recibos para este empleado."
-        except Empleado.DoesNotExist:
-            mensaje = "No se encontró un empleado con ese ID."
-        return render(request, 'mis_recibos.html', {
-            'recibos': recibos,
-            'mensaje': mensaje,
-        })
+            empleado_seleccionado = Empleado.objects.get(id=int(empleado_id))
+            recibos = Recibo.objects.filter(id_empl=empleado_seleccionado).order_by('-fecha_emision')
+            if not recibos.exists():
+                mensaje = f"No se encontraron recibos para {empleado_seleccionado.nombre} {empleado_seleccionado.apellido}."
+        except (ValueError, Empleado.DoesNotExist):
+            mensaje = "El empleado seleccionado no es válido o no fue encontrado."
     else:
-        # Vista para /recibos/ver/
-        id_query = request.GET.get('id')
-        if id_query:
-            try:
-                empleado = Empleado.objects.get(id=int(id_query))
-                recibos = Recibo_Sueldos.objects.filter(id_empl=empleado)
-                if not recibos:
-                    mensaje = "No hay recibos para este empleado."
-            except Empleado.DoesNotExist:
-                mensaje = "No se encontró un empleado con ese DNI."
-        return render(request, 'ver_recibos.html', {
-            'recibos': recibos,
-            'mensaje': mensaje,
-            'dni': id_query,
-        })
+        mensaje = "Por favor, busque un empleado para ver sus recibos."
+
+    return render(request, 'ver_recibos.html', {
+        'recibos': recibos,
+        'mensaje': mensaje,
+        'empleado_seleccionado': empleado_seleccionado,
+    })
 
 def ajax_buscar_empleado(request):
     q = request.GET.get('q', '')
@@ -77,5 +72,3 @@ def ajax_buscar_empleado(request):
             'text': f"{emp.dni} - {emp.nombre} {emp.apellido}"
         })
     return JsonResponse({'results': results})
-
-
