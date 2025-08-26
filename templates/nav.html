@@ -21,7 +21,8 @@
                 <!-- Empleados -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="empleadosDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Empleados</a>
+                        data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="bi bi-people-fill me-2"></i>Empleados</a>
                     <ul class="dropdown-menu" aria-labelledby="empleadosDropdown">
                         <li><a class="dropdown-item" href="{% url 'crear_empleado' %}">Crear Empleado</a></li>
                         <li><a class="dropdown-item" href="{% url 'ver_empleados' %}">Ver Empleados</a></li>
@@ -30,7 +31,7 @@
                 <!-- Recibos -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="recibosDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Recibos</a>
+                        data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-receipt me-2"></i>Recibos</a>
                     <ul class="dropdown-menu" aria-labelledby="recibosDropdown">
                         <li><a class="dropdown-item" href="{% url 'cargar_recibo' %}">Cargar Recibos</a></li>
                         <li><a class="dropdown-item" href="{% url 'ver_recibos' %}">Ver Recibos</a></li>
@@ -39,7 +40,8 @@
                 <!-- Horarios -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="horariosDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Horarios</a>
+                        data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="bi bi-clock-history me-2"></i>Horarios</a>
                     <ul class="dropdown-menu" aria-labelledby="horariosDropdown">
                         <li><a class="dropdown-item" href="{% url 'cargar_horario' %}">Cargar Horarios</a></li>
                         <li><a class="dropdown-item" href="{% url 'asignar_horario' %}">Asignar Horarios</a></li>
@@ -50,7 +52,8 @@
                 <!-- Sanciones -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="sancionesDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Sanciones</a>
+                        data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="bi bi-exclamation-octagon me-2"></i>Sanciones</a>
                     <ul class="dropdown-menu" aria-labelledby="sancionesDropdown">
                         <li><a class="dropdown-item" href="{% url 'agregar_sancion_empleado' %}">Registrar
                                 Sanción</a></li>
@@ -60,7 +63,8 @@
                 <!-- Incidentes -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="incidentesDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Incidentes</a>
+                        data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="bi bi-journal-bookmark-fill me-2"></i>Incidentes</a>
                     <ul class="dropdown-menu" aria-labelledby="incidentesDropdown">
                         <li><a class="dropdown-item" href="{% url 'registrar_incidente' %}">Registrar Incidente</a>
                         </li>
@@ -70,7 +74,8 @@
                 <!-- Asistencias -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="asistenciasDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Asistencias</a>
+                        data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="bi bi-camera-reels me-2"></i>Asistencias</a>
                     <ul class="dropdown-menu" aria-labelledby="asistenciasDropdown">
                         <li><a class="dropdown-item" href="{% url 'registrar_rostro' %}">Registrar Rostro</a></li>
                         <li><a class="dropdown-item" href="{% url 'marcar_asistencia' %}">Marcar Asistencia</a></li>
@@ -166,4 +171,3 @@
         </ul>
     </div>
 </nav>
-
