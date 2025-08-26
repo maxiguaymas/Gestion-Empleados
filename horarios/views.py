@@ -36,7 +36,7 @@ def asignar_horario(request):
                         AsignacionHorario.objects.create(
                             id_empl=empleado,
                             id_horario=horario,
-                            estado='Asignado'
+                            estado=True
                         )
                         asignaciones_realizadas += 1
         if asignaciones_realizadas:
