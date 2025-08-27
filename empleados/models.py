@@ -65,7 +65,7 @@ class Recibo_Sueldos(models.Model):
     ruta_imagen = models.ImageField(upload_to='recibos/imagenes/', blank=True, null=True)
 
     def __str__(self):
-        return f"Recibo {self.id_recibo} - {self.id_empl.nombre} {self.id_empl.apellido}"
+        return f"Recibo {self.pk} - {self.id_empl.nombre} {self.id_empl.apellido}"
   #Clase horarios debe estar al mismo nivel que Empleado
   
 # MODELS DE HORARIOS
@@ -95,7 +95,7 @@ class AsignacionHorario(models.Model):
     estado = models.BooleanField(default=True)
     
     def __str__(self):
-        return f"Asignación de {self.empleado.nombre} {self.empleado.apellido} - {self.horario.dia} {self.horario.turno}"
+        return f"Asignación de {self.id_empl.nombre} {self.id_empl.apellido} - {self.id_horario.dia} {self.id_horario.turno}"
     
 # INCIDENTES
 class Incidente(models.Model):
@@ -121,7 +121,7 @@ class IncidenteEmpleadoDescargo(models.Model):
                                                     # Based on the ERD, it seems id_incid_empl is the primary key.
 
     def __str__(self):
-        return f"Inc. {self.id_incidente.nombre_incid} - Emp. {self.id_emp.nombre_emp}"
+        return f"Inc. {self.id_incidente.nombre_incid} - Emp. {self.id_empl.nombre} {self.id_empl.apellido}"
 
 
 class Descargo(models.Model):
@@ -132,7 +132,7 @@ class Descargo(models.Model):
     id_incid_empl = models.ForeignKey(IncidenteEmpleadoDescargo, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Descargo {self.id_descargo} for Inc. Emp. {self.id_incid_empl.id_incid_empl}"
+        return f"Descargo {self.pk} para {self.id_incid_empl}"
 
 
 # MODELS DE SANCIONES
@@ -162,15 +162,18 @@ class SancionEmpleado(models.Model):
         verbose_name_plural = "Sanciones de Empleados"
 
     @property
-    def estado(self):
+    def esta_activa(self):
         """
-        Determina el estado de la sanción dinámicamente.
-        Devuelve True (Activa) si la fecha actual es menor o igual a la fecha_fin.
-        Si no hay fecha_fin, se considera siempre activa.
+        Determina si la sanción está activa dinámicamente.
+        Una sanción está activa si la fecha actual se encuentra
+        entre la fecha de inicio y la fecha de fin (inclusive).
+        Si no hay fecha_fin, se considera activa indefinidamente
+        a partir de la fecha_inicio.
         """
+        hoy = timezone.now().date()
         if self.fecha_fin is None:
-            return True
-        return timezone.now().date() <= self.fecha_fin
+            return hoy >= self.fecha_inicio
+        return self.fecha_inicio <= hoy <= self.fecha_fin
 
     def __str__(self):
         return f"Sancion {self.id_sancion.nombre} para {self.id_empl.nombre} {self.id_empl.apellido}"

@@ -9,10 +9,9 @@
     <h2 class="mb-4">Recibos de Sueldos</h2>
 
     <!-- Tabla de recibos -->
-    {% if recibos %}
     <div class="col-lg-10 fondo-semi">
         <div class="table-responsive shadow rounded">
-            <table id="tabla-recibos" class="table table-striped table-bordered align-middle">
+            <table class="table table-striped table-bordered align-middle datatable-spanish">
                 <thead class="table-dark">
                     <tr>
                         <th>Nombre</th>
@@ -49,14 +48,22 @@
                             {% endif %}
                         </td>
                     </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No hay recibos de sueldos registrados.</td>
+                        {# Las siguientes 5 celdas vacías son necesarias para que DataTables no dé error #}
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <input type="text" id="filtro-periodo" class="form-control" placeholder="Filtrar por periodo (YYYY-MM)"
-                style="max-width: 220px; display: none;">
         </div>
     </div>
-    {% endif %}
 </main>
 
 
