@@ -139,38 +139,3 @@ def ver_empleado(request, id):
         'legajo': legajo,
         'documentos': documentos,
     })
-
-# --- Gráfico de barras empleados activos/inactivos ---
-@login_required
-@user_passes_test(es_admin)
-def grafico_empleados_activos_inactivos(request):
-    empleados = Empleado.objects.values('estado')
-    df = pd.DataFrame(list(empleados))
-    conteo = df['estado'].value_counts().reset_index()
-    conteo.columns = ['Estado', 'Cantidad']
-    fig = px.bar(conteo, x='Estado', y='Cantidad', title='Empleados Activos vs Inactivos', text='Cantidad')
-    fig.update_traces(textposition='outside')
-    grafico_html = fig.to_html(full_html=False)
-    return render(request, 'grafico_empleados.html', {'grafico': grafico_html})
-
-# --- Exportar gráfico a PDF ---
-@login_required
-@user_passes_test(es_admin)
-def grafico_empleados_pdf(request):
-    empleados = Empleado.objects.values('estado')
-    df = pd.DataFrame(list(empleados))
-    conteo = df['estado'].value_counts().reset_index()
-    conteo.columns = ['Estado', 'Cantidad']
-    fig = px.bar(conteo, x='Estado', y='Cantidad', title='Empleados Activos vs Inactivos', text='Cantidad')
-    fig.update_traces(textposition='outside')
-    grafico_html = fig.to_html(full_html=False)
-
-    template = get_template('grafico_empleados_pdf.html')
-    html = template.render({'grafico': grafico_html})
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="grafico_empleados.pdf"'
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('Error al generar PDF', status=500)
-    return response
