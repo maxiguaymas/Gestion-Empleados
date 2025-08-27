@@ -39,7 +39,13 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="7" class="text-center text-muted">No hay incidentes registrados.</td>
+                            <td colspan="5" class="text-center text-muted">No hay sanciones registradas.</td>
+                            {# Las siguientes 5 celdas vacías son necesarias para que DataTables no dé error #}
+                            <td style="display: none;"></td>
+                            <td style="display: none;"></td>
+                            <td style="display: none;"></td>
+                            <td style="display: none;"></td>
+                            
                         </tr>
                         {% endfor %}
                     </tbody>
