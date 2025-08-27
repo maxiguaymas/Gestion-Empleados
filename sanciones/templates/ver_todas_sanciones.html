@@ -27,7 +27,7 @@
                             <td>{{ sancion.fecha_inicio|date:"d/m/Y" }}</td>
                             <td>{{ sancion.fecha_fin|date:"d/m/Y"|default:"-" }}</td>
                             <td>
-                                {% if sancion.estado %}
+                                {% if sancion.esta_activa %}
                                 <span class="badge bg-success">Activa</span>
                                 {% else %}
                                 <span class="badge bg-secondary">Finalizada</span>
@@ -41,7 +41,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="7" class="text-center text-muted">No hay empleados registrados.</td>
+                            <td colspan="5" class="text-center text-muted">No hay empleados registrados.</td>
                         </tr>
                         {% endfor %}
                     </tbody>

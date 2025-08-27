@@ -119,22 +119,22 @@
             <!-- Menú Perfil de Usuario -->
             <li class="nav-item dropdown">
                 <a class="nav-link d-flex align-items-center" href="#" id="userProfileDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false" title="Perfil de {{ user.first_name }}">
+                    data-bs-toggle="dropdown" aria-expanded="false" title="Perfil de {{ user.empleado.nombre|default:user.username }}">
+                    {% if user.empleado %}
                     <div class="user-initials-circle">
                         {{ user.empleado.nombre.0|upper }}{{ user.empleado.apellido.0|upper }}
                     </div>
+                    {% endif %}
                     <i class="bi bi-caret-down-fill ms-1 text-white"></i>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userProfileDropdown">
+                <ul class="dropdown-menu dropdown-menu-end nav-user" aria-labelledby="userProfileDropdown">
+                    {% if user.empleado %}
                     <li>
                         <h6 class="dropdown-header">{{ user.empleado.nombre|upper }} {{ user.empleado.apellido|upper
                             }}</h6>
                     </li>
-                    <li><a class="dropdown-item" href="{% url 'index' %}"><i
-                                class="bi bi-house-door me-2"></i>Inicio</a></li>
-
-                    {% comment %} Verificamos si el usuario tiene un perfil de empleado asociado para mostrar estas
-                    opciones {% endcomment %}
+                    {% endif %}
+                    <li><a class="dropdown-item" href="{% url 'index' %}"><i class="bi bi-house-door me-2"></i>Inicio</a></li>
                     {% if user.empleado %}
                     <li>
                         <hr class="dropdown-divider">
@@ -149,7 +149,7 @@
                                 class="bi bi-journal-bookmark-fill me-2"></i>Incidentes</a></li>
                     <li><a class="dropdown-item" href="{% url 'mis_horarios' user.empleado.id %}"><i
                                 class="bi bi-clock-history me-2"></i>Horarios</a></li>
-                    <li><a class="dropdown-item" href="{% url 'mis_recibos' user.empleado.id %}"><i
+                    <li><a class="dropdown-item" href="{% url 'mis_recibos' %}"><i
                                 class="bi bi-receipt me-2"></i>Recibos de Sueldo</a></li>
                     {% endif %}
 
