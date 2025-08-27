@@ -44,7 +44,6 @@ def agregar_sancion_empleado(request):
             # Asignar los campos que no vienen en el formulario
             sancion_empleado.id_empl = empleado
             sancion_empleado.responsable = request.user.get_full_name() or request.user.username
-            sancion_empleado.estado = True
             sancion_empleado.save()
             messages.success(request, f"Sanción agregada exitosamente a {empleado.nombre} {empleado.apellido}.")
             return redirect('sanciones_empleado', empleado_id=empleado.id)
@@ -89,7 +88,6 @@ def aplicar_sancion_masiva(request, incidente_id):
                     fecha_fin=datos_sancion['fecha_fin'],
                     motivo=datos_sancion['motivo'],
                     responsable=responsable,
-                    estado=True
                 )
             
             messages.success(request, f'Se aplicó la sanción a {len(involucrados_ids)} empleado(s) exitosamente.')

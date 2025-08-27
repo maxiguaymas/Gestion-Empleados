@@ -61,6 +61,24 @@ def ver_recibos(request):
         'mensaje': mensaje,
         'empleado_seleccionado': empleado_seleccionado,
     })
+    
+def mis_recibos(request):
+    try:
+        # Asume que el modelo User tiene una relación con Empleado (ej. OneToOneField 'empleado').
+        # Si la relación tiene otro nombre, ajústalo aquí.
+        empleado = request.user.empleado
+        recibos = Recibo.objects.filter(id_empl=empleado).order_by('-fecha_emision')
+        mensaje = "Aún no tienes recibos de sueldo registrados." if not recibos.exists() else None
+    except AttributeError:
+        # Esto ocurre si el usuario logueado no es un empleado (ej. es un superuser sin perfil de empleado)
+        recibos = Recibo.objects.none()
+        mensaje = "Tu usuario no está asociado a un perfil de empleado."
+        empleado = None
+    return render(request, 'mis_recibos.html', {
+        'recibos': recibos,
+        'mensaje': mensaje,
+        'empleado_seleccionado': empleado,
+    })
 
 def ajax_buscar_empleado(request):
     q = request.GET.get('q', '')
