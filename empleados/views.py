@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import EmpleadoForm
-from .models import Empleado
+from .models import Empleado, Notificacion
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import user_passes_test
@@ -15,8 +16,6 @@ def es_admin(user):
 def index(request):
     return render(request, 'index.html')
 
-@login_required
-@user_passes_test(es_admin)
 @login_required
 @user_passes_test(es_admin)
 def crear_empleado(request):
@@ -43,6 +42,13 @@ def crear_empleado(request):
             user.save()
             empleado.user = user
             empleado.save()
+
+            # Crear notificación de bienvenida para el nuevo empleado
+            Notificacion.objects.create(
+                id_user=user,
+                mensaje=f"¡Bienvenido/a, {empleado.nombre}! Tu perfil ha sido creado exitosamente.",
+                enlace=reverse('ver_empleado', args=[empleado.id])
+            )
 
             nro_leg = Legajo.objects.count() + 1
             legajo = Legajo.objects.create(
