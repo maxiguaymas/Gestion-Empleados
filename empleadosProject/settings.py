@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'captcha',
     'sanciones',
     'incidentes',
-    'asistencia'
+    'asistencia',
+    'notificaciones'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'notificaciones.context_processors.notificaciones_processor',
             ],
         },
     },

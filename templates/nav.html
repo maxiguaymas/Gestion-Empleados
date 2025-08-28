@@ -100,19 +100,30 @@
             <li class="nav-item dropdown">
                 <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false" title="Notificaciones">
-                    <div class="nav-icon-wrapper">
+                    <div class="nav-icon-wrapper position-relative">
                         <i class="bi bi-bell fs-4"></i>
-                        <!-- Opcional: Badge de notificaciones -->
-                        <!-- <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span> -->
+                        {% if notificaciones_sin_leer_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6em;">
+                            {{ notificaciones_sin_leer_count }}
+                            <span class="visually-hidden">notificaciones sin leer</span>
+                        </span>
+                        {% endif %}
                     </div>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-                    <li><a class="dropdown-item" href="#">Notificación 1</a></li>
-                    <li><a class="dropdown-item" href="#">Notificación 2</a></li>
+                <ul class="dropdown-menu dropdown-menu-end notifications-dropdown" aria-labelledby="notificationsDropdown">
+                    {% for notificacion in notificaciones|slice:":5" %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'marcar_leida' notificacion.id %}">
+                            {{ notificacion.mensaje }}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li><span class="dropdown-item-text">No tienes notificaciones nuevas.</span></li>
+                    {% endfor %}
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item text-center" href="#">Ver todas</a></li>
+                    <li><a class="dropdown-item text-center" href="{% url 'ver_todas_notificaciones' %}">Ver todas las notificaciones</a></li>
                 </ul>
             </li>
 
