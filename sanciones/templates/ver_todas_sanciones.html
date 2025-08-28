@@ -34,9 +34,9 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{% url 'sanciones_empleado' sancion.id_empl.id %}"
-                                    class="btn btn-sm btn-outline-info" title="Ver historial del empleado">Ver
-                                    Historial</a>
+                                <a href="{% url 'detalle_sancion' sancion.id %}" class="btn btn-sm btn-outline-primary"
+                                    title="Ver detalle de la sanción">Detalle</a>
+                                
                             </td>
                         </tr>
                         {% empty %}

@@ -130,8 +130,7 @@
                 <ul class="dropdown-menu dropdown-menu-end nav-user" aria-labelledby="userProfileDropdown">
                     {% if user.empleado %}
                     <li>
-                        <h6 class="dropdown-header">{{ user.empleado.nombre|upper }} {{ user.empleado.apellido|upper
-                            }}</h6>
+                        <h6 class="dropdown-header">{{ user.empleado.nombre|upper }} {{ user.empleado.apellido|upper }}</h6>
                     </li>
                     {% endif %}
                     <li><a class="dropdown-item" href="{% url 'index' %}"><i class="bi bi-house-door me-2"></i>Inicio</a></li>
