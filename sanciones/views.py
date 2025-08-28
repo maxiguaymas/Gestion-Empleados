@@ -142,3 +142,17 @@ def agregar_resolucion(request, sancion_empleado_id):
         'form': form,
         'sancion': sancion_empleado
     })
+    
+    
+def detalle_sancion(request, sancion_id):
+    """
+    Muestra los detalles de una sanción específica.
+    """
+    sancionEmpleado = get_object_or_404(SancionEmpleado, pk=sancion_id)
+    sancion = sancionEmpleado.id_sancion
+    
+    context = {
+        'sancion_empleado': sancionEmpleado,
+        'sancion': sancion
+    }
+    return render(request, 'detalle_sancion.html', context)

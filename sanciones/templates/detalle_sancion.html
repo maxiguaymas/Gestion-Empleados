@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="py-5 min-vh-100" id="empleados">
+    <div class="container">
+        <h1 class="mb-4 text-center fw-bold">Detalle de la Sanción</h1>
+        <div class="row justify-content-center
+        ">
+            <div class="col-md-8">
+                <div class="card shadow fondo-semi">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">Sanción #{{ sancion.id }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">Empleado:</dt>
+                            <dd class="col-sm-8">{{ sancion_empleado.id_empl.nombre }} {{ sancion.id_empl.apellido }}</dd>
+
+                            <dt class="col-sm-4">DNI del Empleado:</dt>
+                            <dd class="col-sm-8">{{ sancion_empleado.id_empl.dni }}</dd>
+
+                            <dt class="col-sm-4">Tipo de Sanción:</dt>
+                            <dd class="col-sm-8">{{ sancion.tipo }}</dd>
+
+                            <dt class="col-sm-4">Fecha de Inicio:</dt>
+                            <dd class="col-sm-8">{{ sancion_empleado.fecha_inicio|date:"d/m/Y" }}</dd>
+
+                            <dt class="col-sm-4">Fecha de Fin:</dt>
+                            <dd class="col-sm-8">{{ sancion_empleado.fecha_fin|date:"d/m/Y"|default:"No especificada" }}</dd>
+
+                            <dt class="col-sm-4">Estado:</dt>
+                            <dd class="col-sm-8">
+                                {% if sancion_empleado.esta_activa %}
+                                    <span class="badge bg-success">Activa</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Finalizada</span>
+                                {% endif %}
+                            </dd>
+
+                            {# Asumiendo que tu modelo Sancion tiene un campo 'descripcion' #}
+                            <dt class="col-sm-4">Descripción / Motivo:</dt>
+                            <dd class="col-sm-8">{{ sancion_empleado.motivo|default:"No se proporcionó una descripción."|linebreaksbr }}</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{% url 'ver_todas_sanciones' %}" class="btn btn-secondary">Volver al Historial</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

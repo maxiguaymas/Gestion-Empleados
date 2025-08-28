@@ -27,7 +27,7 @@
                             <td>{{ sancion.fecha_fin|default:"-" }}</td>
                             <td>{{ sancion.responsable }}</td>
                             <td>
-                                {% if sancion.estado %}
+                                {% if sancion.esta_activa %}
                                 <span class="badge bg-success">Activa</span>
                                 {% else %}
                                 <span class="badge bg-secondary">Finalizada</span>
